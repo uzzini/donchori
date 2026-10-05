@@ -18,8 +18,8 @@ export default function App() {
     <main className={styles.page}>
       <section className={styles.card}>
         <h1 className={styles.title}>
-          <img className={styles.logoLight} src="/logos/donchori-full-logo.svg" alt="돈초리" />
-          <img className={styles.logoDark} src="/logos/donchori-full-logo-dark.svg" alt="" />
+          <img className={styles.logoLight} src="/logos/donchori-full-logo.webp" alt="돈초리" />
+          <img className={styles.logoDark} src="/logos/donchori-full-logo-dark.webp" alt="" />
         </h1>
         <p className={styles.tagline}>맞아볼래?</p>
 

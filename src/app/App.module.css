@@ -20,9 +20,8 @@
   justify-content: center;
 
   & img {
-    width: 200px;
-    height: auto;
-    aspect-ratio: 3 / 1;
+    width: auto;
+    height: 48px;
   }
 }
 
