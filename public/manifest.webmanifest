@@ -1,0 +1,23 @@
+{
+  "name": "돈초리",
+  "short_name": "돈초리",
+  "description": "맞아볼래?",
+  "lang": "ko",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf8f2",
+  "theme_color": "#faf8f2",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/donchori-icon.png",
+      "sizes": "1024x1024",
+      "type": "image/png"
+    }
+  ]
+}
