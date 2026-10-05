@@ -1,0 +1,44 @@
+@import './tokens.css';
+@import './reset.css';
+
+html,
+body {
+  background: var(--bg);
+}
+
+body {
+  min-height: 100dvh;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  /* iOS 노치·홈 바 영역 */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+/* iOS는 16px 미만 입력창에 포커스하면 화면을 확대함 */
+input,
+textarea,
+select {
+  font-size: max(16px, 1em);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 금액 자릿수 정렬 */
+.amount {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
