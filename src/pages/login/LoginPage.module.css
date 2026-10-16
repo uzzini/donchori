@@ -1,0 +1,488 @@
+/* 모바일 기본 → 600px 태블릿 → 1024px */
+
+.page {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: var(--space-8) var(--space-5) 88px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+/* ---------- 배경 장식 ---------- */
+.deco {
+  --deco-scale: 0.35;
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.corner {
+  position: absolute;
+  width: 0;
+  height: 0;
+  scale: var(--deco-scale);
+}
+
+.cornerTL {
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+.cornerBL {
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom left;
+}
+
+.cornerBR {
+  right: 0;
+  bottom: 0;
+  transform-origin: bottom right;
+}
+
+.blob {
+  position: absolute;
+  background: var(--deco-shape);
+  mask: var(--shape) center / 100% 100% no-repeat;
+}
+
+.blobTL {
+  --shape: url('../../assets/bg/blob-top-left.svg');
+  top: -130px;
+  left: -110px;
+  width: 410px;
+  height: 318px;
+}
+
+.blobBL {
+  --shape: url('../../assets/bg/blob-bottom-left.svg');
+  bottom: -206px;
+  left: 0;
+  width: 650px;
+  height: 480px;
+}
+
+.blobBR {
+  --shape: url('../../assets/bg/blob-bottom-right.svg');
+  right: -110px;
+  bottom: -186px;
+  width: 600px;
+  height: 480px;
+}
+
+/* 위치값 = 나뭇잎 중심점 */
+.leaf {
+  position: absolute;
+  height: var(--size);
+  aspect-ratio: 486 / 527;
+  background: var(--sage);
+  mask: url('/icons/leaf.svg') center / contain no-repeat;
+  translate: -50% -50%;
+  rotate: var(--angle);
+}
+
+.leafA {
+  --size: 108px;
+  --angle: -15deg;
+  top: 157px;
+  left: 107px;
+}
+
+.leafB {
+  --size: 54px;
+  --angle: -105deg;
+  top: 378px;
+  left: 128px;
+}
+
+.leafC {
+  --size: 54px;
+  --angle: -90deg;
+  bottom: 146px;
+  left: 278px;
+  translate: -50% 50%;
+}
+
+.leafD {
+  --size: 66px;
+  --angle: -60deg;
+  right: 134px;
+  bottom: 118px;
+  translate: 50% 50%;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+}
+
+/* ---------- 브랜드 ---------- */
+.brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.icon {
+  width: 84px;
+  height: 84px;
+}
+
+.logo {
+  width: auto;
+  height: 36px;
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  color: var(--sage);
+}
+
+/* 라이트/다크 이미지 교체 */
+.dark {
+  display: none;
+}
+
+:global(:root[data-theme='dark']) {
+  & .light {
+    display: none;
+  }
+
+  & .dark {
+    display: block;
+  }
+}
+
+/* ---------- 폼 영역 ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--text-h2);
+  line-height: var(--lh-h1);
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--text-tertiary);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding-inline: var(--space-4);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  & input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &::placeholder {
+      color: var(--text-tertiary);
+      opacity: 1;
+    }
+  }
+}
+
+.fieldIcon {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.eyeButton {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: -13px;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+}
+
+.remember {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.checkbox {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+
+  & input {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    transition:
+      background-color 150ms ease,
+      border-color 150ms ease;
+
+    &:checked {
+      background: var(--btn-primary-bg);
+      border-color: var(--btn-primary-bg);
+    }
+  }
+
+  & svg {
+    position: absolute;
+    color: var(--btn-primary-text);
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  & input:checked + svg {
+    opacity: 1;
+  }
+}
+
+.forgot {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-1);
+  margin-inline-end: calc(var(--space-1) * -1);
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+}
+
+.primary {
+  height: 48px;
+  font-weight: 600;
+  color: var(--btn-primary-text);
+  background: var(--btn-primary-bg);
+  border-radius: var(--radius-md);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--btn-primary-bg-hover);
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+}
+
+.google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  height: 48px;
+  font-weight: 500;
+  color: var(--btn-google-text);
+  background: var(--btn-google-bg);
+  border: 1px solid var(--btn-google-border);
+  border-radius: var(--radius-md);
+}
+
+.signup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+}
+
+.signupLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-1);
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- 태블릿 ---------- */
+@media (min-width: 600px) {
+  .deco {
+    --deco-scale: 0.7;
+  }
+
+  .icon {
+    width: 104px;
+    height: 104px;
+  }
+
+  .logo {
+    height: 44px;
+  }
+
+  .card {
+    gap: var(--space-6);
+  }
+}
+
+/* ---------- 데스크톱: 좌 브랜드 / 우 폼 ---------- */
+@media (min-width: 1024px) {
+  .page {
+    padding: 0;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+    max-width: none;
+    min-height: 100dvh;
+    margin: 0;
+  }
+
+  .brand {
+    justify-content: center;
+    gap: 0;
+    padding: var(--space-8);
+  }
+
+  .brandText {
+    gap: var(--space-3);
+  }
+
+  .deco {
+    --deco-scale: 0.75;
+  }
+
+  .icon {
+    width: 176px;
+    height: 176px;
+  }
+
+  .logo {
+    height: 72px;
+  }
+
+  .tagline {
+    font-size: var(--text-body);
+    line-height: var(--lh-body);
+  }
+
+  .panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-8) 64px;
+  }
+
+  .card {
+    width: 360px;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .deco {
+    --deco-scale: 1;
+  }
+}

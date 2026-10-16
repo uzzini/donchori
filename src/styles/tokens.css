@@ -56,6 +56,7 @@
   --surface-accent: var(--cream-100);
   --surface-subtle: var(--gray-100);
   --border: var(--gray-300);
+  --border-subtle: #e0ddd0;
   --text: var(--ink);
   --text-secondary: var(--gray-700);
   --text-tertiary: var(--gray-500);
@@ -64,10 +65,15 @@
   --btn-primary-bg-hover: var(--burgundy-900);
   --btn-primary-text: var(--cream-100);
   --sage: var(--sage-500);
+  --deco-shape: var(--cream-100);
   --income: var(--blue-600);
   --income-bg: #e8f0fb;
   --expense: var(--red-600);
   --expense-bg: #fbecea;
+  /* Google 로그인 버튼 (브랜드 가이드 색상) */
+  --btn-google-bg: #ffffff;
+  --btn-google-border: #747775;
+  --btn-google-text: #1f1f1f;
 
   color-scheme: light;
 }
@@ -79,16 +85,22 @@
   --surface-accent: #2b2724;
   --surface-subtle: #1e1b19;
   --border: #3a3632;
+  --border-subtle: #2e2a27;
   --text: var(--cream-100);
   --text-secondary: #a39e96;
   --text-tertiary: #8c8781;
   --accent: var(--burgundy-300);
-  --btn-primary-bg-hover: #8a1416;
+  --btn-primary-bg: #8a1416;
+  --btn-primary-bg-hover: #a2201f;
   --sage: var(--sage-300);
+  --deco-shape: #36312b;
   --income: var(--blue-300);
   --income-bg: #1b2333;
   --expense: var(--red-300);
   --expense-bg: #2e1b19;
+  --btn-google-bg: #131314;
+  --btn-google-border: #8e918f;
+  --btn-google-text: #e3e3e3;
   --shadow-card: none;
   color-scheme: dark;
 }
