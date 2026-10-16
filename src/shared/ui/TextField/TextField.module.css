@@ -47,6 +47,12 @@
       color: var(--text-tertiary);
       opacity: 1;
     }
+
+    &:-webkit-autofill {
+      -webkit-text-fill-color: var(--text);
+      caret-color: var(--text);
+      box-shadow: 0 0 0 1000px var(--surface-subtle) inset;
+    }
   }
 }
 

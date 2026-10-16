@@ -1,6 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import Toast from '@/shared/ui/Toast/Toast';
 import { useThemeStore, type ResolvedTheme } from '@/stores/useThemeStore';
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
@@ -52,6 +53,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ThemeSync />
       {children}
+      <Toast />
       {import.meta.env.DEV && <ReactQueryDevtools buttonPosition="bottom-left" />}
     </QueryClientProvider>
   );

@@ -1,0 +1,72 @@
+.viewport {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  /* 모바일 좌우 16px 이상 + iOS 홈 바 영역 */
+  padding: 0 max(var(--space-4), env(safe-area-inset-right))
+    calc(var(--space-6) + env(safe-area-inset-bottom))
+    max(var(--space-4), env(safe-area-inset-left));
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  max-width: 400px;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  word-break: keep-all;
+  text-wrap: balance;
+  color: var(--surface);
+  background: var(--text);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  animation: toast-in 200ms ease-out;
+  transition:
+    opacity 200ms ease,
+    translate 200ms ease,
+    visibility 0s linear 200ms;
+
+  & svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* 퇴장: 흐려지며 내려간 뒤 숨김 */
+  &[data-open='false'] {
+    opacity: 0;
+    translate: 0 8px;
+    visibility: hidden;
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes toast-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* 움직임 줄이기: 위치 이동 없이 나타나고 사라짐 */
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation-name: toast-fade;
+
+    &[data-open='false'] {
+      translate: none;
+    }
+  }
+}

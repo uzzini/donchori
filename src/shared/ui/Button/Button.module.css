@@ -4,9 +4,18 @@
   color: var(--btn-primary-text);
   background: var(--btn-primary-bg);
   border-radius: var(--radius-md);
-  transition: background-color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: var(--btn-primary-bg-hover);
+  }
+
+  /* 비활성: 입력 조건 미충족 또는 처리 중 */
+  &:disabled {
+    color: var(--text-tertiary);
+    background: var(--border);
+    cursor: not-allowed;
   }
 }
