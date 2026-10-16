@@ -6,15 +6,17 @@ body {
   background: var(--bg);
 }
 
+/* iOS 바운스 스크롤 시 화면 밖 배경이 드러나지 않도록 */
+html {
+  overscroll-behavior: none;
+}
+
 body {
   min-height: 100dvh;
   color: var(--text);
   font-family: var(--font-body);
   font-size: var(--text-body);
   line-height: var(--lh-body);
-  /* iOS 노치·홈 바 영역 */
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
-    env(safe-area-inset-left);
 }
 
 /* iOS는 16px 미만 입력창에 포커스하면 화면을 확대함 */

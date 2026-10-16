@@ -6,7 +6,10 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  padding: var(--space-8) var(--space-5) 88px;
+  padding: calc(var(--space-4) + env(safe-area-inset-top))
+    calc(var(--space-5) + env(safe-area-inset-right))
+    calc(var(--page-pb, 56px) + env(safe-area-inset-bottom))
+    calc(var(--space-5) + env(safe-area-inset-left));
   overflow: hidden;
   background: var(--surface);
 }
@@ -14,7 +17,7 @@
 /* ---------- 배경 장식 ---------- */
 .deco {
   --deco-scale: 0.35;
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
@@ -223,7 +226,8 @@
 /* ---------- 데스크톱: 좌 브랜드 / 우 폼 ---------- */
 @media (min-width: 1024px) {
   .page {
-    padding: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
   }
 
   .inner {
@@ -293,6 +297,11 @@
 
 .longForm .leafB {
   display: none;
+}
+
+/* 한 화면에 들어가도록 아래 여백을 줄임 */
+.longForm {
+  --page-pb: var(--space-8);
 }
 
 /* 1024px 이상: 아이콘·나뭇잎 복원, 폼만 스크롤되도록 브랜드 고정 */

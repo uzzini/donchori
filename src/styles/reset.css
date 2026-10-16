@@ -9,6 +9,8 @@
 }
 
 html {
+  /* 모바일 터치 시 생기는 회색 하이라이트 제거 */
+  -webkit-tap-highlight-color: transparent;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
