@@ -1,4 +1,5 @@
 import { Check, EyeOff, Lock, User } from 'lucide-react';
+import { Link } from 'react-router';
 import googleLogo from '@/assets/icons/google.svg';
 import styles from './LoginPage.module.css';
 
@@ -87,7 +88,7 @@ export default function LoginPage() {
                     autoComplete="username"
                     autoCapitalize="none"
                     spellCheck={false}
-                    placeholder="이메일 또는 아이디"
+                    placeholder="이메일"
                   />
                 </div>
 
@@ -136,9 +137,9 @@ export default function LoginPage() {
 
             <p className={styles.signup}>
               아직 계정이 없으신가요?
-              <a href="#" className={styles.signupLink}>
+              <Link to="/signup" className={styles.signupLink}>
                 회원가입
-              </a>
+              </Link>
             </p>
           </div>
         </section>
