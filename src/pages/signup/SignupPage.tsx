@@ -46,7 +46,7 @@ export default function SignupPage() {
       { nickname, email, password },
       {
         onSuccess: () => {
-          showToast('가입이 완료됐어요!');
+          showToast('인증 메일을 보냈어요. 메일함을 확인해 주세요.');
           navigate('/login');
         },
         onError: (error) => {

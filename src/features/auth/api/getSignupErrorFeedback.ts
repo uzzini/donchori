@@ -32,6 +32,7 @@ export function getSignupErrorFeedback(error: unknown): SignupErrorFeedback {
         message: '사용할 수 없는 이메일이에요. 다른 이메일을 입력해 주세요.',
       };
     case 'over_request_rate_limit':
+    case 'over_email_send_rate_limit':
       return { message: '요청이 많아 잠시 쉬어가고 있어요. 잠시 후 다시 시도해 주세요.' };
     case 'signup_disabled':
     case 'email_provider_disabled':

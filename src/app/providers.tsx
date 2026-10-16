@@ -1,7 +1,9 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { supabase } from '@/shared/lib/supabase';
 import Toast from '@/shared/ui/Toast/Toast';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useThemeStore, type ResolvedTheme } from '@/stores/useThemeStore';
 
 const DARK_QUERY = '(prefers-color-scheme: dark)';
@@ -35,6 +37,21 @@ function ThemeSync() {
   return null;
 }
 
+// Supabase 세션 변화(로그인·로그아웃·토큰 갱신)를 스토어에 반영
+function AuthSync() {
+  const setSession = useAuthStore((s) => s.setSession);
+
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => setSession(session));
+
+    return () => subscription.unsubscribe();
+  }, [setSession]);
+
+  return null;
+}
+
 export function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
     () =>
@@ -52,6 +69,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeSync />
+      <AuthSync />
       {children}
       <Toast />
       {import.meta.env.DEV && <ReactQueryDevtools buttonPosition="bottom-left" />}

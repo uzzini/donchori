@@ -1,4 +1,7 @@
+import { useLogout } from '@/features/auth/api/useLogout';
+import { useAuthStore } from '@/stores/useAuthStore';
 import { useThemeStore, type Theme } from '@/stores/useThemeStore';
+import { useToastStore } from '@/stores/useToastStore';
 import styles from './App.module.css';
 
 const THEMES: { value: Theme; label: string }[] = [
@@ -13,6 +16,15 @@ const THEMES: { value: Theme; label: string }[] = [
 export default function App() {
   const theme = useThemeStore((s) => s.theme);
   const setTheme = useThemeStore((s) => s.setTheme);
+  const email = useAuthStore((s) => s.session?.user.email);
+  const showToast = useToastStore((s) => s.show);
+  const logout = useLogout();
+
+  const onLogout = () => {
+    logout.mutate(undefined, {
+      onError: () => showToast('로그아웃하지 못했어요. 잠시 후 다시 시도해 주세요.', 'error'),
+    });
+  };
 
   return (
     <main className={styles.page}>
@@ -52,6 +64,19 @@ export default function App() {
         <button type="button" className={styles.primary}>
           기록하기
         </button>
+
+        {/* 테스트용: 로그인 계정 확인 + 로그아웃 */}
+        <div className={styles.account}>
+          <span>{email}</span>
+          <button
+            type="button"
+            className={styles.logout}
+            disabled={logout.isPending}
+            onClick={onLogout}
+          >
+            로그아웃
+          </button>
+        </div>
       </section>
     </main>
   );

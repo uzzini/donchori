@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { AuthError } from '@supabase/supabase-js';
 import { supabase } from '@/shared/lib/supabase';
 
 type SignupParams = {
@@ -13,10 +14,15 @@ async function signUp({ nickname, email, password }: SignupParams) {
     password,
     options: {
       data: { nickname },
+      emailRedirectTo: `${window.location.origin}/login`,
     },
   });
 
   if (error) throw error;
+
+  if (data.user?.identities?.length === 0) {
+    throw new AuthError('User already registered', 422, 'user_already_exists');
+  }
 
   return data;
 }
