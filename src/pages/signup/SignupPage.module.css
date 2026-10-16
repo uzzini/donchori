@@ -1,18 +1,6 @@
-/* 로그인 모듈(LoginPage.module.css) 위에 덧씌우는 회원가입 전용 스타일 */
-
-/* ---------- 브랜드 ---------- */
-/* 다크 모드 이미지 교체 규칙보다 우선하도록 래퍼 단위로 숨김 */
-.icons {
-  display: none;
-}
-
-/* 아이콘이 빠져 폼이 위로 올라오므로, 타이틀과 겹치는 나뭇잎은 1024px 미만에서 숨김 */
-.leafB {
-  display: none;
-}
-
-/* ---------- 폼 영역 ---------- */
 .form {
+  display: flex;
+  flex-direction: column;
   gap: var(--space-6);
 }
 
@@ -20,67 +8,4 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-}
-
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.label {
-  font-size: var(--text-sm);
-  line-height: var(--lh-sm);
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-.helper {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-1);
-  font-size: var(--text-xs);
-  line-height: var(--lh-xs);
-  color: var(--text-tertiary);
-
-  & svg {
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-}
-
-/* 에러 상태 */
-.helperError {
-  color: var(--expense);
-}
-
-.fieldError {
-  border-color: var(--expense);
-
-  &:focus-within {
-    border-color: var(--expense);
-    box-shadow: 0 0 0 3px color-mix(in srgb, var(--expense) 20%, transparent);
-  }
-}
-
-/* ---------- 데스크톱: 브랜드 고정 ---------- */
-@media (min-width: 1024px) {
-  .page {
-    overflow: clip;
-  }
-
-  .brand {
-    position: sticky;
-    top: 0;
-    height: 100dvh;
-    align-self: start;
-  }
-
-  .icons {
-    display: contents;
-  }
-
-  .leafB {
-    display: block;
-  }
 }

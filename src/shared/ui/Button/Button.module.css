@@ -1,0 +1,12 @@
+.primary {
+  height: 48px;
+  font-weight: 600;
+  color: var(--btn-primary-text);
+  background: var(--btn-primary-bg);
+  border-radius: var(--radius-md);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--btn-primary-bg-hover);
+  }
+}

@@ -1,0 +1,99 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  padding-inline: var(--space-4);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  & input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    font-size: 16px;
+    background: transparent;
+    border: none;
+
+    &:focus-visible {
+      outline: none;
+    }
+
+    &::placeholder {
+      font-size: var(--text-sm);
+      color: var(--text-tertiary);
+      opacity: 1;
+    }
+  }
+}
+
+.fieldIcon {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+}
+
+.eyeButton {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: -13px;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+.helper {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  color: var(--text-tertiary);
+
+  & svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+}
+
+/* 에러 상태 */
+.helper.helperError {
+  color: var(--expense);
+}
+
+.field.fieldError {
+  border-color: var(--expense);
+
+  &:focus-within {
+    border-color: var(--expense);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--expense) 20%, transparent);
+  }
+}
