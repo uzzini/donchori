@@ -1,0 +1,313 @@
+/* 모바일 기본 → 1024px 사이드바 */
+
+.shell {
+  --tabbar-h: 64px;
+  min-height: 100dvh;
+  background: var(--surface);
+}
+
+.content {
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+}
+
+/* ---------- 모바일 상단 헤더 ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) 0 env(safe-area-inset-left);
+  background: var(--surface);
+}
+
+.topbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 560px;
+  height: 56px;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+
+  & .logo {
+    width: auto;
+    height: 30px;
+  }
+}
+
+/* 스크롤을 시작하면 아래 구분선 표시 (지원 브라우저만) */
+@supports (animation-timeline: scroll()) {
+  .topbar {
+    animation: topbar-line linear both;
+    animation-timeline: scroll();
+    animation-range: 0 16px;
+  }
+}
+
+@keyframes topbar-line {
+  from {
+    box-shadow: 0 1px 0 transparent;
+  }
+
+  to {
+    box-shadow: 0 1px 0 var(--border-subtle);
+  }
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: calc(var(--space-3) * -1);
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover:not(:disabled) {
+    color: var(--text);
+    background: var(--surface-subtle);
+  }
+}
+
+/* ---------- 하단 탭바 ---------- */
+.nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: var(--surface);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.brand,
+.tab.logout {
+  display: none;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 560px;
+  height: var(--tabbar-h);
+  margin-inline: auto;
+}
+
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 100%;
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  &[aria-current='page'] {
+    font-weight: 700;
+    color: var(--accent);
+  }
+}
+
+.tabIcon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+}
+
+/* 라이트/다크 이미지 교체 */
+.dark {
+  display: none;
+}
+
+:global(:root[data-theme='dark']) {
+  & .logo.light {
+    display: none;
+  }
+
+  & .logo.dark {
+    display: block;
+  }
+}
+
+/* ---------- 데스크톱: 좌측 사이드바 ---------- */
+@media (min-width: 1024px) {
+  .shell {
+    --sidebar-w: 232px;
+  }
+
+  .collapsed {
+    --sidebar-w: 76px;
+  }
+
+  .topbar {
+    display: none;
+  }
+
+  .content {
+    padding-bottom: 0;
+    padding-left: var(--sidebar-w);
+    transition: padding-left 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  .nav {
+    top: 0;
+    right: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: var(--sidebar-w);
+    padding: calc(var(--space-5) + env(safe-area-inset-top)) var(--space-4) var(--space-5)
+      calc(var(--space-4) + env(safe-area-inset-left));
+    border-top: none;
+    border-right: 1px solid var(--border-subtle);
+    transition: width 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* 로고 + 접기 버튼 */
+  .brand .logo {
+    flex-shrink: 0;
+    width: auto;
+    height: 34px;
+    margin-left: var(--space-3);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    height: 44px;
+  }
+
+  .collapsed .brand .logo.logo {
+    display: none;
+  }
+
+  .toggle {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    color: var(--text-tertiary);
+    border-radius: var(--radius-md);
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+
+    &:hover {
+      color: var(--text);
+      background: var(--surface-subtle);
+    }
+  }
+
+  .collapsed .brand {
+    justify-content: center;
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    height: auto;
+    margin: 0;
+  }
+
+  .tab {
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: var(--space-3);
+    height: 48px;
+    padding-inline: var(--space-3);
+    font-size: var(--text-body);
+    white-space: nowrap;
+    border-radius: var(--radius-md);
+    transition:
+      color 150ms ease,
+      background-color 150ms ease;
+
+    &:hover {
+      background: var(--surface-subtle);
+    }
+
+    &[aria-current='page'] {
+      background: var(--surface-accent);
+    }
+  }
+
+  /* 하단 로그아웃 */
+  .tab.logout {
+    display: flex;
+    width: 100%;
+    margin-top: auto;
+    color: var(--text-tertiary);
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  /* 펼칠 때: 너비가 늘어난 뒤 글자·로고가 나타나도록 (사이드바 밖으로 삐져나오지 않게) */
+  .shell:not(.collapsed) :is(.tabLabel, .brand .logo) {
+    animation: label-in 120ms ease 160ms both;
+  }
+
+  /* 접힘: 아이콘만, 이름은 마우스·키보드 포커스 시 오른쪽 툴팁 */
+  .collapsed .tab {
+    position: relative;
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .collapsed .tabLabel,
+  .tooltip {
+    position: absolute;
+    top: 50%;
+    left: calc(100% + var(--space-2));
+    z-index: 30;
+    padding: 6px 10px;
+    font-size: var(--text-xs);
+    line-height: var(--lh-xs);
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+    background: var(--surface-accent);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-card);
+    opacity: 0;
+    translate: -4px -50%;
+    pointer-events: none;
+    transition:
+      opacity 120ms ease,
+      translate 120ms ease;
+  }
+
+  .collapsed .tab:is(:hover, :focus-visible) .tabLabel,
+  .toggle:is(:hover, :focus-visible) .tooltip {
+    opacity: 1;
+    translate: 0 -50%;
+  }
+
+  .toggle {
+    position: relative;
+  }
+}
+
+@keyframes label-in {
+  from {
+    opacity: 0;
+  }
+}

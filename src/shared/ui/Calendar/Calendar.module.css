@@ -1,0 +1,96 @@
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.month {
+  margin-right: var(--space-2);
+  font-size: var(--text-h2);
+  line-height: var(--lh-h2);
+  font-weight: 700;
+}
+
+.navButton {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  row-gap: var(--space-1);
+  justify-items: center;
+}
+
+.weekday {
+  padding-block: var(--space-1);
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+
+  &:first-child {
+    color: var(--expense);
+  }
+
+  &:nth-child(7) {
+    color: var(--income);
+  }
+}
+
+.day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &[data-weekday='0'] {
+    color: var(--expense);
+  }
+
+  &[data-weekday='6'] {
+    color: var(--income);
+  }
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+
+  /* 오늘: 아래 점 */
+  &[aria-current='date']::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    width: 4px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: var(--radius-full);
+  }
+
+  &[aria-pressed='true'] {
+    font-weight: 700;
+    color: var(--btn-primary-text);
+    background: var(--btn-primary-bg);
+
+    &::after {
+      background: var(--btn-primary-text);
+    }
+  }
+}

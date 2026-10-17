@@ -1,0 +1,70 @@
+.card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--card-padding);
+
+  & + & {
+    border-left: 1px solid var(--border-subtle);
+  }
+
+  & dt {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-sm);
+    line-height: var(--lh-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  & dd {
+    overflow: hidden;
+    font-size: var(--text-h2);
+    line-height: var(--lh-h2);
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.chip {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--stat-color);
+  background: var(--stat-bg);
+  border-radius: var(--radius-full);
+}
+
+.income {
+  --stat-color: var(--income);
+  --stat-bg: var(--income-bg);
+}
+
+.expense {
+  --stat-color: var(--expense);
+  --stat-bg: var(--expense-bg);
+}
+
+/* 좁은 화면에서 일곱 자리 금액이 잘리지 않도록 */
+@media (max-width: 389px) {
+  .stat dd {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 359px) {
+  .stat dd {
+    font-size: var(--text-body);
+  }
+}

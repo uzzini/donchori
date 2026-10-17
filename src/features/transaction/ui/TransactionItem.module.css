@@ -1,0 +1,41 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.meta {
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  color: var(--text-tertiary);
+}
+
+.amount {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.income {
+  color: var(--income);
+}
+
+.expense {
+  color: var(--text);
+}
+
+.transfer {
+  color: var(--text-tertiary);
+}

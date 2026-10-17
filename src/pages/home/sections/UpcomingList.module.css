@@ -1,0 +1,36 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 48px;
+
+  & + & {
+    border-top: 1px solid var(--border-subtle);
+  }
+}
+
+.memo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.amount {
+  flex-shrink: 0;
+  font-weight: 700;
+}
+
+.empty {
+  padding-block: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-tertiary);
+  text-align: center;
+}

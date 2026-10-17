@@ -1,0 +1,73 @@
+.page {
+  max-width: 560px;
+  margin-inline: auto;
+  padding: var(--space-2) calc(var(--space-5) + env(safe-area-inset-right)) var(--space-8)
+    calc(var(--space-5) + env(safe-area-inset-left));
+}
+
+.iconButton {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover:not(:disabled) {
+    color: var(--text);
+    background: var(--surface-subtle);
+  }
+
+  &:disabled {
+    color: var(--border);
+    cursor: not-allowed;
+  }
+}
+
+.month {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0 0 var(--gap-section) calc(var(--space-3) * -1);
+}
+
+.monthLabel {
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.grid,
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+
+/* ---------- 데스크톱 ---------- */
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1040px;
+    padding: calc(var(--space-5) + env(safe-area-inset-top))
+      calc(var(--space-8) + env(safe-area-inset-right)) var(--space-8) var(--space-8);
+  }
+
+  .month {
+    margin-bottom: var(--space-5);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-5);
+  }
+
+  .column {
+    gap: var(--space-5);
+  }
+}

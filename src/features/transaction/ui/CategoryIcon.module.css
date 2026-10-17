@@ -1,0 +1,22 @@
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--cat-color) 70%, var(--text));
+  background: color-mix(in srgb, var(--cat-color) 14%, transparent);
+  border-radius: var(--radius-full);
+}
+
+.sm {
+  width: 32px;
+  height: 32px;
+}
+
+.md {
+  width: 40px;
+  height: 40px;
+}
+
+.plain {
+  color: var(--cat-color);
+}

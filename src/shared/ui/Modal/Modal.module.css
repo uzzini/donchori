@@ -1,0 +1,150 @@
+.dialog {
+  width: 100%;
+  max-width: none;
+  max-height: calc(100dvh - var(--space-8));
+  margin: auto 0 0;
+  padding: 0;
+  color: var(--text);
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+
+  &::backdrop {
+    background: rgb(28 26 23 / 0.4);
+  }
+
+  &[open] {
+    animation: sheet-in 240ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &[open]::backdrop {
+    animation: fade-in 240ms ease;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+  padding: var(--card-padding) calc(var(--space-5) + env(safe-area-inset-right))
+    calc(var(--space-6) + env(safe-area-inset-bottom))
+    calc(var(--space-5) + env(safe-area-inset-left));
+
+  /* 바텀시트 손잡이 */
+  &::before {
+    content: '';
+    align-self: center;
+    width: 36px;
+    height: 4px;
+    margin-top: calc(var(--space-2) * -1);
+    background: var(--border);
+    border-radius: var(--radius-full);
+  }
+}
+
+.header {
+  isolation: isolate;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--space-2);
+}
+
+.custom {
+  align-self: center;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-h2);
+  line-height: var(--lh-h2);
+  font-weight: 700;
+}
+
+.description {
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+}
+
+.close {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin: 0 -12px 0 0;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  transition: color 150ms ease;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    z-index: -1;
+    border-radius: inherit;
+    transition: background-color 150ms ease;
+  }
+
+  &:hover {
+    color: var(--text);
+
+    &::before {
+      background: var(--surface-subtle);
+    }
+  }
+}
+
+/* ---------- 태블릿 이상: 가운데 다이얼로그 ---------- */
+@media (min-width: 600px) {
+  .dialog {
+    width: calc(100% - var(--space-8));
+    max-width: 400px;
+    margin: auto;
+    border-radius: var(--radius-lg);
+
+    &[open] {
+      animation: dialog-in 200ms cubic-bezier(0.2, 0, 0, 1);
+    }
+  }
+
+  .panel {
+    padding: var(--space-6);
+
+    &::before {
+      display: none;
+    }
+  }
+
+  .heading {
+    padding-top: var(--space-1);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    translate: 0 100%;
+  }
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    scale: 0.96;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}

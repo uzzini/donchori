@@ -1,6 +1,5 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { supabase } from '@/shared/lib/supabase';
 import Toast from '@/shared/ui/Toast/Toast';
 import { useAuthStore } from '@/stores/useAuthStore';
@@ -72,7 +71,6 @@ export function AppProviders({ children }: { children: ReactNode }) {
       <AuthSync />
       {children}
       <Toast />
-      {import.meta.env.DEV && <ReactQueryDevtools buttonPosition="bottom-left" />}
     </QueryClientProvider>
   );
 }
