@@ -4,6 +4,7 @@ import GuestRoute from '@/features/auth/ui/GuestRoute';
 import ProtectedRoute from '@/features/auth/ui/ProtectedRoute';
 import HomePage from '@/pages/home/HomePage';
 import LoginPage from '@/pages/login/LoginPage';
+import NotFoundPage from '@/pages/not-found/NotFoundPage';
 import SignupPage from '@/pages/signup/SignupPage';
 
 export const router = createBrowserRouter([
@@ -12,8 +13,15 @@ export const router = createBrowserRouter([
     children: [
       {
         element: <AppLayout />,
-        // todo: 내역·계획·설정 화면 추가
-        children: [{ path: '/', element: <HomePage /> }],
+        errorElement: <NotFoundPage layout="standalone" />,
+        children: [
+          { path: '/', element: <HomePage /> },
+          // todo: 내역·계획·설정 화면 만들면 준비 중 화면 교체
+          { path: '/history', element: <NotFoundPage variant="preparing" title="내역" /> },
+          { path: '/plan', element: <NotFoundPage variant="preparing" title="계획" /> },
+          { path: '/settings', element: <NotFoundPage variant="preparing" title="설정" /> },
+          { path: '*', element: <NotFoundPage /> },
+        ],
       },
     ],
   },

@@ -1,0 +1,179 @@
+/* 모바일 기본 → 1024px 사이드바 */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  max-width: 560px;
+  min-height: calc(
+    100dvh - 56px - var(--tabbar-h, 64px) - env(safe-area-inset-top) - env(safe-area-inset-bottom)
+  );
+  margin-inline: auto;
+  padding: var(--space-8) calc(var(--space-5) + env(safe-area-inset-right)) var(--space-8)
+    calc(var(--space-5) + env(safe-area-inset-left));
+}
+
+/* AppLayout 밖 단독 화면 */
+.standalone {
+  max-width: none;
+  min-height: 100dvh;
+  padding-top: calc(var(--space-7) + env(safe-area-inset-top));
+  padding-bottom: calc(var(--space-8) + env(safe-area-inset-bottom));
+  background: var(--surface);
+}
+
+.brand {
+  align-self: center;
+}
+
+.logo {
+  width: auto;
+  height: 36px;
+}
+
+/* 라이트/다크 이미지 교체 */
+.dark {
+  display: none;
+}
+
+:global(:root[data-theme='dark']) {
+  & .logo.light {
+    display: none;
+  }
+
+  & .logo.dark {
+    display: block;
+  }
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  animation: enter 200ms ease both;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+.badge {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--space-6);
+  color: var(--sage);
+  background: color-mix(in srgb, var(--surface-accent) 55%, var(--surface));
+  border-radius: var(--radius-full);
+}
+
+.eyebrow {
+  margin-bottom: var(--space-2);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  color: var(--sage);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  font-size: var(--text-h2);
+  line-height: var(--lh-h2);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.desc {
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--text-tertiary);
+}
+
+/* ---------- 버튼 ---------- */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 320px;
+  margin-top: var(--space-8);
+}
+
+.primary {
+  display: grid;
+  place-items: center;
+  order: -1;
+}
+
+.secondary {
+  height: 48px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+
+  &:hover {
+    color: var(--text);
+    background: var(--surface-subtle);
+  }
+}
+
+/* ---------- 데스크톱 ---------- */
+@media (min-width: 1024px) {
+  .page {
+    max-width: none;
+    min-height: 100dvh;
+  }
+
+  .logo {
+    height: 44px;
+  }
+
+  .badge {
+    margin-bottom: var(--space-7);
+  }
+
+  .header {
+    gap: var(--space-5);
+  }
+
+  .title {
+    font-size: var(--text-h1);
+    line-height: var(--lh-h1);
+  }
+
+  .actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: var(--space-3);
+    width: auto;
+    margin-top: calc(var(--space-8) + var(--space-2));
+    max-width: none;
+  }
+
+  .primary {
+    order: 0;
+  }
+
+  .primary,
+  .secondary {
+    min-width: 160px;
+    padding-inline: var(--space-6);
+  }
+}
