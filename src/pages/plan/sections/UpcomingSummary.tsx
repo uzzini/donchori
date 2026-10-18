@@ -1,4 +1,4 @@
-import type { PlannedExpense } from '../mockData';
+import type { PlannedExpense } from '@/features/plan/model/plannedExpense';
 import SummaryCard, { SummaryText } from '../ui/SummaryCard';
 import styles from './UpcomingSummary.module.css';
 
@@ -23,7 +23,7 @@ export default function UpcomingSummary({ items }: { items: PlannedExpense[] }) 
       <SummaryText
         note={
           items.length === 0
-            ? '사고 싶은 것, 곧 나갈 돈을 적어 두면 합계를 알려드려요.'
+            ? '곧 나갈 돈을 적어 두면 합계를 알려드려요.'
             : `${items.length}개 중 ${doneCount}개 완료 · ${items.length - doneCount}개 남았어요.`
         }
       />

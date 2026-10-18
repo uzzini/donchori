@@ -1,7 +1,10 @@
 import { Check, Trash2 } from 'lucide-react';
+import { useDeletePlannedExpense } from '@/features/plan/api/useDeletePlannedExpense';
+import { useTogglePlannedExpense } from '@/features/plan/api/useTogglePlannedExpense';
+import type { PlannedExpense } from '@/features/plan/model/plannedExpense';
 import { formatWon } from '@/shared/lib/formatAmount';
 import Section from '@/shared/ui/Section/Section';
-import type { PlannedExpense } from '../mockData';
+import { useToastStore } from '@/stores/useToastStore';
 import UpcomingComposer from './UpcomingComposer';
 import styles from './UpcomingChecklist.module.css';
 
@@ -11,19 +14,43 @@ type UpcomingChecklistProps = {
 };
 
 function ChecklistItem({ item }: { item: PlannedExpense }) {
+  const showToast = useToastStore((s) => s.show);
+  const togglePlanned = useTogglePlannedExpense();
+  const deletePlanned = useDeletePlannedExpense();
+
+  const onToggle = (done: boolean) =>
+    togglePlanned.mutate(
+      { id: item.id, done },
+      {
+        onError: () =>
+          showToast('체크 상태를 저장하지 못했어요. 잠시 후 다시 시도해 주세요.', 'error'),
+      },
+    );
+
+  const onDelete = () =>
+    deletePlanned.mutate(item.id, {
+      onSuccess: () => showToast(`'${item.memo}' 예정 지출을 삭제했어요.`),
+      onError: () =>
+        showToast('예정 지출을 삭제하지 못했어요. 잠시 후 다시 시도해 주세요.', 'error'),
+    });
+
   return (
     <li className={styles.item}>
-      {/* todo: 체크 시 완료 상태 저장 연결 */}
       <label className={styles.check}>
-        <input type="checkbox" defaultChecked={item.done} />
+        <input type="checkbox" checked={item.done} onChange={(e) => onToggle(e.target.checked)} />
         <span className={styles.box} aria-hidden>
           <Check size={14} strokeWidth={3} />
         </span>
         <span className={styles.memo}>{item.memo}</span>
         <span className={`amount ${styles.amount}`}>{formatWon(item.amount)}</span>
       </label>
-      {/* todo: 삭제 연결 */}
-      <button type="button" className={styles.delete} aria-label={`${item.memo} 삭제`} title="삭제">
+      <button
+        type="button"
+        className={styles.delete}
+        aria-label={`${item.memo} 삭제`}
+        title="삭제"
+        onClick={onDelete}
+      >
         <Trash2 size={16} strokeWidth={1.75} aria-hidden />
       </button>
     </li>
@@ -63,7 +90,25 @@ export default function UpcomingChecklist({ items, className }: UpcomingChecklis
               ))}
             </ul>
           ) : (
-            <p className={styles.allDone}>적어 둔 예정 지출을 모두 마쳤어요!</p>
+            <div className={styles.allDone}>
+              <span className={styles.coin} aria-hidden>
+                <img
+                  className={styles.light}
+                  src="/icons/coin-icon.svg"
+                  width={576}
+                  height={588}
+                  alt=""
+                />
+                <img
+                  className={styles.dark}
+                  src="/icons/coin-dark-icon.svg"
+                  width={576}
+                  height={588}
+                  alt=""
+                />
+              </span>
+              <p>적어 둔 예정 지출을 모두 마쳤어요!</p>
+            </div>
           )}
           {done.length > 0 && (
             <div className={styles.group}>

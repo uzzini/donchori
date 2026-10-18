@@ -6,6 +6,7 @@ import type { UpcomingExpense } from '@/features/plan/api/useUpcomingExpenses';
 import { formatWon } from '@/shared/lib/formatAmount';
 import { toMonthKey } from '@/shared/lib/month';
 import Modal from '@/shared/ui/Modal/Modal';
+import { SectionLink } from '@/shared/ui/Section/Section';
 import UpcomingList from './UpcomingList';
 import styles from './BudgetCard.module.css';
 
@@ -14,7 +15,7 @@ type BudgetCardProps = {
   isCurrent: boolean; // 이번 달인지, 지난 달이면 하루 사용 가능 금액·예정 지출 숨김
   budget: number | null; // null이면 예산 미설정
   spent: number;
-  upcoming: UpcomingExpense[]; // 이번 달 남은 예정 지출
+  upcoming: UpcomingExpense[]; // 아직 지출하지 않은 예정 지출
 };
 
 /* 월 예산: 남은 예산 + 사용률 + 하루 사용 가능 금액 + 예정 지출 목록 모달 + 예산 등록·수정 */
@@ -64,7 +65,7 @@ export default function BudgetCard({ month, isCurrent, budget, spent, upcoming }
       <Modal
         open={upcomingOpen}
         onClose={() => setUpcomingOpen(false)}
-        title="이번 달 예정 지출"
+        title="남은 예정 지출"
         description={
           upcoming.length > 0 && (
             <span className="amount">
@@ -74,6 +75,9 @@ export default function BudgetCard({ month, isCurrent, budget, spent, upcoming }
         }
       >
         <UpcomingList items={upcoming} />
+        <div className={styles.manage}>
+          <SectionLink to="/plan">계획에서 관리하기</SectionLink>
+        </div>
       </Modal>
 
       <Modal

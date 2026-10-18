@@ -202,3 +202,9 @@
     opacity: 0.7;
   }
 }
+
+/* 예정 지출 모달 하단: 계획 화면으로 이동 */
+.manage {
+  display: flex;
+  justify-content: center;
+}

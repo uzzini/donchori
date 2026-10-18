@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
+import { usePlannedExpenses } from '@/features/plan/api/usePlannedExpenses';
 import { useRecurringTransactions } from '@/features/recurring/api/useRecurringTransactions';
 import type { RecurringTransaction } from '@/features/recurring/model/recurring';
 import RecurringForm from '@/features/recurring/ui/RecurringForm';
 import Button from '@/shared/ui/Button/Button';
 import Section from '@/shared/ui/Section/Section';
-import { MOCK_PLANNED } from './mockData';
 import { panelId, tabId, type PlanTab } from './lib/planTab';
 import PlanTabs from './PlanTabs';
 import RecurringEditModal from './sections/RecurringEditModal';
@@ -23,14 +23,27 @@ export default function PlanPage() {
   const onTabChange = (next: PlanTab) =>
     setParams(next === 'upcoming' ? {} : { tab: next }, { replace: true });
 
-  // todo: 예정 지출 목업 → 실제 데이터 연결
-  const planned = MOCK_PLANNED;
+  const plannedQuery = usePlannedExpenses();
+  const planned = plannedQuery.data ?? [];
   const recurringQuery = useRecurringTransactions();
   const recurring = recurringQuery.data ?? [];
   const [editing, setEditing] = useState<RecurringTransaction | null>(null);
 
   const skeleton = (height: number, className: string) => (
     <div className={`${styles.skeleton} ${className}`} style={{ height }} aria-hidden />
+  );
+
+  const loadError = (name: string, retry: () => void) => (
+    <div className={`${styles.error} ${styles.summary}`} role="alert">
+      <p>
+        {name} 불러오지 못했어요.
+        <br />
+        잠시 후 다시 시도해 주세요.
+      </p>
+      <Button type="button" className={styles.retry} onClick={retry}>
+        다시 불러오기
+      </Button>
+    </div>
   );
 
   return (
@@ -43,7 +56,7 @@ export default function PlanPage() {
         value={tab}
         onChange={onTabChange}
         counts={{
-          upcoming: planned.filter((p) => !p.done).length,
+          upcoming: plannedQuery.data?.filter((p) => !p.done).length,
           recurring: recurringQuery.data?.length,
         }}
       />
@@ -56,29 +69,25 @@ export default function PlanPage() {
         className={styles.panel}
       >
         {tab === 'upcoming' ? (
-          <>
-            <div className={`${styles.summary} ${styles.sticky}`}>
-              <UpcomingSummary items={planned} />
-            </div>
-            <UpcomingChecklist items={planned} className={styles.list} />
-          </>
+          plannedQuery.isError ? (
+            loadError('예정 지출을', () => plannedQuery.refetch())
+          ) : plannedQuery.isPending ? (
+            <>
+              {skeleton(152, styles.summary)}
+              {skeleton(420, styles.list)}
+            </>
+          ) : (
+            <>
+              <div className={`${styles.summary} ${styles.sticky}`}>
+                <UpcomingSummary items={planned} />
+              </div>
+              <UpcomingChecklist items={planned} className={styles.list} />
+            </>
+          )
         ) : (
           <>
             {recurringQuery.isError ? (
-              <div className={`${styles.error} ${styles.summary}`} role="alert">
-                <p>
-                  반복 거래를 불러오지 못했어요.
-                  <br />
-                  잠시 후 다시 시도해 주세요.
-                </p>
-                <Button
-                  type="button"
-                  className={styles.retry}
-                  onClick={() => recurringQuery.refetch()}
-                >
-                  다시 불러오기
-                </Button>
-              </div>
+              loadError('반복 거래를', () => recurringQuery.refetch())
             ) : recurringQuery.isPending ? (
               <>
                 {skeleton(208, styles.summary)}

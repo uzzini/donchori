@@ -23,7 +23,7 @@ export default function HomePage() {
 
   const transactions = useMonthTransactions(monthKey);
   const budget = useMonthBudget(monthKey);
-  const upcoming = useUpcomingExpenses({ enabled: isCurrent });
+  const upcoming = useUpcomingExpenses();
 
   const summary = useMemo(() => {
     const list = transactions.data ?? [];
