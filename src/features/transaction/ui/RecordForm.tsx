@@ -2,15 +2,16 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
 import { PenLine } from 'lucide-react';
-import { parseAmount } from '@/shared/lib/formatAmount';
+import { formatAmountInput, parseAmount } from '@/shared/lib/formatAmount';
 import AmountInput from '@/shared/ui/AmountInput/AmountInput';
 import Button from '@/shared/ui/Button/Button';
 import DatePicker from '@/shared/ui/DatePicker/DatePicker';
 import TextField from '@/shared/ui/TextField/TextField';
 import { useToastStore } from '@/stores/useToastStore';
-import { useCreateTransaction } from '../api/useCreateTransaction';
+import { useSaveTransaction } from '../api/useSaveTransaction';
 import { TYPE_LABEL, type TransactionType } from '../model/category';
 import { recordSchema, type RecordFormValues } from '../model/recordSchema';
+import { transactionName, type Transaction } from '../model/transaction';
 import CategoryChips from './CategoryChips';
 import TypeTabs from './TypeTabs';
 import styles from './RecordForm.module.css';
@@ -25,12 +26,26 @@ const today = () => dayjs().format('YYYY-MM-DD');
 
 type RecordFormProps = {
   idPrefix: string; // 한 화면에 여러 개 둘 때 id 충돌 방지
+  initial?: Transaction;
+  onDone?: () => void;
 };
 
-/* 수입·지출·이체 기록 입력 카드 */
-export default function RecordForm({ idPrefix }: RecordFormProps) {
+const toFormValues = (item?: Transaction): RecordFormValues =>
+  item
+    ? {
+        type: item.type,
+        amount: formatAmountInput(String(item.amount)),
+        category: item.category,
+        date: item.occurredOn,
+        memo: item.memo,
+      }
+    : { type: 'expense', amount: '', category: null, date: today(), memo: '' };
+
+/* 수입·지출·이체 기록 입력·수정 */
+export default function RecordForm({ idPrefix, initial, onDone }: RecordFormProps) {
   const showToast = useToastStore((s) => s.show);
-  const createTransaction = useCreateTransaction();
+  const saveTransaction = useSaveTransaction();
+  const isEdit = initial !== undefined;
 
   const {
     register,
@@ -41,7 +56,7 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
     formState: { errors },
   } = useForm<RecordFormValues>({
     resolver: zodResolver(recordSchema),
-    defaultValues: { type: 'expense', amount: '', category: null, date: today(), memo: '' },
+    defaultValues: toFormValues(initial),
   });
 
   const [type, amount, category] = useWatch({ control, name: ['type', 'amount', 'category'] });
@@ -49,8 +64,9 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
   const isFilled = amount !== '' && (type !== 'expense' || category !== null);
 
   const onSubmit = handleSubmit((values) => {
-    createTransaction.mutate(
+    saveTransaction.mutate(
       {
+        id: initial?.id,
         type: values.type,
         category: values.type === 'expense' ? values.category : null,
         amount: parseAmount(values.amount),
@@ -59,10 +75,19 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
       },
       {
         onSuccess: () => {
-          showToast(`${typeLabel} ${values.amount}원을 기록했어요.`);
-          reset({ ...values, amount: '', category: null, memo: '' });
+          if (isEdit) {
+            showToast(`${transactionName(values)} 내역을 수정했어요.`);
+          } else {
+            showToast(`${typeLabel} ${values.amount}원을 기록했어요.`);
+            reset({ ...values, amount: '', category: null, memo: '' });
+          }
+          onDone?.();
         },
-        onError: () => showToast('기록하지 못했어요. 잠시 후 다시 시도해 주세요.', 'error'),
+        onError: () =>
+          showToast(
+            `${isEdit ? '수정' : '기록'}하지 못했어요. 잠시 후 다시 시도해 주세요.`,
+            'error',
+          ),
       },
     );
   });
@@ -137,8 +162,8 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
         />
       </div>
 
-      <Button type="submit" disabled={!isFilled || createTransaction.isPending}>
-        기록하기
+      <Button type="submit" disabled={!isFilled || saveTransaction.isPending}>
+        {isEdit ? '변경 내용 저장하기' : '기록하기'}
       </Button>
     </form>
   );

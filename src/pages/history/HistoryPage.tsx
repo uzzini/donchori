@@ -1,12 +1,15 @@
 import { useId, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useMonthTransactions } from '@/features/transaction/api/useMonthTransactions';
+import type { Transaction } from '@/features/transaction/model/transaction';
 import { sumByType } from '@/pages/home/lib/summarize';
 import SummaryTiles from '@/pages/home/sections/SummaryTiles';
 import { useMonthParam } from '@/shared/hooks/useMonthParam';
-import { MOCK_TRANSACTIONS } from './lib/mockTransactions';
+import Button from '@/shared/ui/Button/Button';
 import DayDetailModal from './sections/DayDetailModal';
 import HistoryCalendar from './sections/HistoryCalendar';
 import HistorySearch from './sections/HistorySearch';
+import TransactionEditModal from './sections/TransactionEditModal';
 import styles from './HistoryPage.module.css';
 
 /* 내역: 월별 달력 + 검색 */
@@ -14,13 +17,16 @@ export default function HistoryPage() {
   const { month, monthKey, isCurrent, move } = useMonthParam();
   const titleId = useId();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Transaction | null>(null);
 
-  // todo: 데이터 연결 시 useMonthTransactions(monthKey)로 교체
-  const transactions = useMemo(
-    () => MOCK_TRANSACTIONS.filter((t) => t.occurredOn.startsWith(monthKey)),
-    [monthKey],
-  );
+  const query = useMonthTransactions(monthKey);
+  const transactions = useMemo(() => query.data ?? [], [query.data]);
   const totals = sumByType(transactions);
+  const monthName = isCurrent ? '이번 달' : month.format('M월');
+
+  const skeleton = (height: number) => (
+    <div className={styles.skeleton} style={{ height }} aria-hidden />
+  );
 
   return (
     <main className={styles.page}>
@@ -53,26 +59,53 @@ export default function HistoryPage() {
             </button>
           </div>
 
-          <SummaryTiles {...totals} />
+          {query.isError ? (
+            <div className={styles.error} role="alert">
+              <p>
+                {monthName} 내역을 불러오지 못했어요.
+                <br />
+                잠시 후 다시 시도해 주세요.
+              </p>
+              <Button type="button" className={styles.retry} onClick={() => query.refetch()}>
+                다시 불러오기
+              </Button>
+            </div>
+          ) : query.isPending ? (
+            <>
+              {skeleton(88)}
+              {skeleton(440)}
+            </>
+          ) : (
+            <div
+              className={
+                query.isPlaceholderData ? `${styles.content} ${styles.switching}` : styles.content
+              }
+              aria-busy={query.isPlaceholderData}
+            >
+              <SummaryTiles {...totals} />
 
-          <HistoryCalendar
-            month={month}
-            transactions={transactions}
-            labelledBy={titleId}
-            onSelect={setSelectedDate}
-            onMonthMove={move}
-          />
+              <HistoryCalendar
+                month={month}
+                transactions={transactions}
+                labelledBy={titleId}
+                onSelect={setSelectedDate}
+                onMonthMove={move}
+              />
+            </div>
+          )}
         </div>
 
-        {/* todo: 데이터 연결 시 기간 검색 쿼리로 교체 */}
-        <HistorySearch transactions={MOCK_TRANSACTIONS} />
+        <HistorySearch onSelect={setEditing} />
       </div>
 
       <DayDetailModal
         date={selectedDate}
         transactions={transactions}
+        onSelect={setEditing}
         onClose={() => setSelectedDate(null)}
       />
+
+      <TransactionEditModal item={editing} onClose={() => setEditing(null)} />
     </main>
   );
 }

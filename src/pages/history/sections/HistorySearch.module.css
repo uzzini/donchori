@@ -152,10 +152,6 @@
   flex-direction: column;
   gap: var(--gap-section);
   animation: panel-in 200ms ease both;
-
-  & li {
-    border-radius: var(--radius-sm);
-  }
 }
 
 @keyframes panel-in {
@@ -182,6 +178,21 @@
   line-height: var(--lh-xs);
   font-weight: 600;
   color: var(--text-tertiary);
+}
+
+/* 줄 전체를 눌러 수정 */
+.item {
+  display: block;
+  width: calc(100% + var(--space-2) * 2);
+  margin-inline: calc(var(--space-2) * -1);
+  padding-inline: var(--space-2);
+  text-align: left;
+  border-radius: var(--radius-md);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
 }
 
 .more {
@@ -231,4 +242,38 @@
   width: auto;
   margin-top: var(--space-3);
   padding-inline: var(--space-6);
+}
+
+/* ---------- 불러오는 중 ---------- */
+.skeleton {
+  height: 240px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+  animation:
+    skeleton-in 200ms ease 300ms both,
+    skeleton-pulse 1.4s ease-in-out 500ms infinite;
+}
+
+@keyframes skeleton-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* 기간 변경 중: 이전 결과를 흐리게 유지 */
+.switching {
+  opacity: 0.6;
+  transition: opacity 150ms ease 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: skeleton-in 0s 300ms both;
+  }
 }

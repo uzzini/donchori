@@ -17,11 +17,17 @@ const GROUP_ORDER: TransactionType[] = ['income', 'expense', 'transfer'];
 type DayDetailModalProps = {
   date: string | null;
   transactions: Transaction[];
+  onSelect: (item: Transaction) => void;
   onClose: () => void;
 };
 
 /* 달력에서 고른 날의 내역 */
-export default function DayDetailModal({ date, transactions, onClose }: DayDetailModalProps) {
+export default function DayDetailModal({
+  date,
+  transactions,
+  onSelect,
+  onClose,
+}: DayDetailModalProps) {
   const items = date ? transactions.filter((t) => t.occurredOn === date) : [];
   const { income, expense } = sumByType(items);
 
@@ -55,13 +61,20 @@ export default function DayDetailModal({ date, transactions, onClose }: DayDetai
                   const { label } = CATEGORY_META[category];
                   return (
                     <li key={item.id}>
-                      <TransactionItem
-                        type={item.type}
-                        category={category}
-                        title={item.memo || label}
-                        meta={label}
-                        amount={item.amount}
-                      />
+                      <button
+                        type="button"
+                        className={styles.row}
+                        aria-haspopup="dialog"
+                        onClick={() => onSelect(item)}
+                      >
+                        <TransactionItem
+                          type={item.type}
+                          category={category}
+                          title={item.memo || label}
+                          meta={label}
+                          amount={item.amount}
+                        />
+                      </button>
                     </li>
                   );
                 })}

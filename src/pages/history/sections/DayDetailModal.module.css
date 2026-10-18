@@ -29,6 +29,21 @@
   color: var(--text-tertiary);
 }
 
+/* 줄 전체를 눌러 수정 */
+.row {
+  display: block;
+  width: calc(100% + var(--space-2) * 2);
+  margin-inline: calc(var(--space-2) * -1);
+  padding-inline: var(--space-2);
+  text-align: left;
+  border-radius: var(--radius-md);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+}
+
 .empty {
   padding-block: var(--space-4);
   font-size: var(--text-sm);

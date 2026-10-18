@@ -1,0 +1,84 @@
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* ---------- 삭제 ---------- */
+.deleteLink {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-md);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover {
+    color: var(--expense);
+    background: var(--expense-bg);
+  }
+}
+
+.confirm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-secondary);
+  background: var(--expense-bg);
+  border-radius: var(--radius-md);
+
+  & strong {
+    font-weight: 700;
+    color: var(--text);
+  }
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+
+  & button {
+    flex: 1;
+    height: 44px;
+    font-weight: 600;
+    border-radius: var(--radius-md);
+    transition:
+      background-color 150ms ease,
+      opacity 150ms ease;
+  }
+}
+
+.cancel {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+}
+
+.danger {
+  color: #fff;
+  background: var(--expense);
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

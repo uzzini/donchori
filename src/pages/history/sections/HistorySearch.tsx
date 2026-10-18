@@ -1,5 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { CalendarDays, ChevronDown, Search, SearchX, X } from 'lucide-react';
+import { CalendarDays, ChevronDown, CloudOff, Search, SearchX, X } from 'lucide-react';
+import { usePeriodTransactions } from '@/features/transaction/api/usePeriodTransactions';
 import { CATEGORY_META } from '@/features/transaction/model/category';
 import { categoryKeyOf, type Transaction } from '@/features/transaction/model/transaction';
 import CategoryFilterChips, {
@@ -17,11 +18,11 @@ const PAGE_SIZE = 5;
 const DEBOUNCE_MS = 250;
 
 type HistorySearchProps = {
-  transactions: Transaction[];
+  onSelect: (item: Transaction) => void;
 };
 
 /* 내역 검색: 메모 · 기간 · 카테고리 */
-export default function HistorySearch({ transactions }: HistorySearchProps) {
+export default function HistorySearch({ onSelect }: HistorySearchProps) {
   const [q, setQ] = useState('');
   const [keyword, setKeyword] = useState('');
   const [period, setPeriod] = useState<Period>(() => presetPeriod('1m'));
@@ -34,10 +35,18 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
     return () => clearTimeout(timer);
   }, [q]);
 
+  const query = usePeriodTransactions(period.from, period.to);
+  const transactions = query.data;
+
   const filterKey = `${keyword}|${period.from}|${period.to}|${category}`;
   const results = useMemo(
     () =>
-      searchTransactions(transactions, { q: keyword, from: period.from, to: period.to, category }),
+      searchTransactions(transactions ?? [], {
+        q: keyword,
+        from: period.from,
+        to: period.to,
+        category,
+      }),
     [transactions, keyword, period.from, period.to, category],
   );
 
@@ -51,7 +60,8 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
 
   useEffect(() => {
     if (focusIndex.current === null) return;
-    listRef.current?.querySelectorAll<HTMLLIElement>('li')[focusIndex.current]?.focus();
+    const items = listRef.current?.querySelectorAll<HTMLButtonElement>('li > button');
+    items?.[focusIndex.current]?.focus();
     focusIndex.current = null;
   }, [visible]);
 
@@ -133,7 +143,11 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
       <div className={styles.card}>
         <div className={styles.resultHeader}>
           <p className={styles.count} aria-live="polite">
-            검색 결과 <strong>{results.length}건</strong>
+            {query.isSuccess && (
+              <>
+                검색 결과 <strong>{results.length}건</strong>
+              </>
+            )}
           </p>
           {isFiltered && (
             <button type="button" className={styles.reset} onClick={onReset}>
@@ -142,8 +156,30 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
           )}
         </div>
 
-        <div key={filterKey} ref={listRef} className={styles.results}>
-          {results.length > 0 ? (
+        <div
+          key={filterKey}
+          ref={listRef}
+          className={
+            query.isPlaceholderData ? `${styles.results} ${styles.switching}` : styles.results
+          }
+          aria-busy={query.isFetching}
+        >
+          {query.isError ? (
+            <div className={styles.empty} role="alert">
+              <CloudOff size={32} strokeWidth={1.75} aria-hidden />
+              <p className={styles.emptyTitle}>내역을 불러오지 못했어요.</p>
+              <p className={styles.emptyHint}>잠시 후 다시 시도해 주세요.</p>
+              <button
+                type="button"
+                className={`${styles.more} ${styles.emptyReset}`}
+                onClick={() => query.refetch()}
+              >
+                다시 불러오기
+              </button>
+            </div>
+          ) : query.isPending ? (
+            <div className={styles.skeleton} aria-hidden />
+          ) : results.length > 0 ? (
             <>
               {groups.map((group) => (
                 <div key={group.label} className={styles.group}>
@@ -153,14 +189,21 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
                       const itemCategory = categoryKeyOf(item);
                       const { label } = CATEGORY_META[itemCategory];
                       return (
-                        <li key={item.id} tabIndex={-1}>
-                          <TransactionItem
-                            type={item.type}
-                            category={itemCategory}
-                            title={item.memo || label}
-                            meta={label}
-                            amount={item.amount}
-                          />
+                        <li key={item.id}>
+                          <button
+                            type="button"
+                            className={styles.item}
+                            aria-haspopup="dialog"
+                            onClick={() => onSelect(item)}
+                          >
+                            <TransactionItem
+                              type={item.type}
+                              category={itemCategory}
+                              title={item.memo || label}
+                              meta={label}
+                              amount={item.amount}
+                            />
+                          </button>
                         </li>
                       );
                     })}
@@ -177,14 +220,6 @@ export default function HistorySearch({ transactions }: HistorySearchProps) {
             <div className={styles.empty}>
               <SearchX size={32} strokeWidth={1.75} aria-hidden />
               <p className={styles.emptyTitle}>조건에 맞는 내역이 없어요.</p>
-              <p className={styles.emptyHint}>기간을 늘리거나 카테고리를 '전체'로 바꿔 보세요.</p>
-              <button
-                type="button"
-                className={`${styles.more} ${styles.emptyReset}`}
-                onClick={onReset}
-              >
-                필터 초기화
-              </button>
             </div>
           )}
         </div>
