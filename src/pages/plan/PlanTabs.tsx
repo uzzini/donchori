@@ -5,7 +5,7 @@ import styles from './PlanTabs.module.css';
 type PlanTabsProps = {
   value: PlanTab;
   onChange: (value: PlanTab) => void;
-  counts: Record<PlanTab, number>;
+  counts: Record<PlanTab, number | undefined>; // 불러오는 중이면 undefined → 숫자 숨김
 };
 
 /* 계획 화면 탭 */
@@ -43,10 +43,12 @@ export default function PlanTabs({ value, onChange, counts }: PlanTabsProps) {
             onClick={() => onChange(tab.value)}
           >
             {tab.label}
-            <span className={`amount ${styles.count}`}>
-              {counts[tab.value]}
-              <span className="sr-only">건</span>
-            </span>
+            {counts[tab.value] !== undefined && (
+              <span className={`amount ${styles.count}`}>
+                {counts[tab.value]}
+                <span className="sr-only">건</span>
+              </span>
+            )}
           </button>
         );
       })}

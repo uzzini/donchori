@@ -8,13 +8,14 @@ import styles from './RecurringList.module.css';
 
 type RecurringListProps = {
   items: RecurringTransaction[];
+  onSelect: (item: RecurringTransaction) => void;
   className?: string;
 };
 
 type Row = RecurringTransaction & { day: number };
 
 /* 반복 거래 목록: 이번 달 다가오는 거래 + 지난 거래 */
-export default function RecurringList({ items, className }: RecurringListProps) {
+export default function RecurringList({ items, onSelect, className }: RecurringListProps) {
   const today = dayjs();
   const lastDay = today.daysInMonth();
 
@@ -39,13 +40,20 @@ export default function RecurringList({ items, className }: RecurringListProps) 
               .join(' · ');
             return (
               <li key={row.id}>
-                <TransactionItem
-                  type={row.type}
-                  category={category}
-                  title={row.memo || label}
-                  meta={meta}
-                  amount={row.amount}
-                />
+                <button
+                  type="button"
+                  className={styles.row}
+                  aria-haspopup="dialog"
+                  onClick={() => onSelect(row)}
+                >
+                  <TransactionItem
+                    type={row.type}
+                    category={category}
+                    title={row.memo || label}
+                    meta={meta}
+                    amount={row.amount}
+                  />
+                </button>
               </li>
             );
           })}

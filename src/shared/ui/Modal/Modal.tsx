@@ -28,7 +28,8 @@ export default function Modal({ open, onClose, title, description, header, child
       ref={ref}
       className={styles.dialog}
       aria-labelledby={titleId}
-      onClose={onClose}
+      // React는 close를 부모 컴포넌트로도 전파, 안쪽 모달이 닫힐 때 같이 닫히지 않게 자기 것만 처리
+      onClose={(e) => e.target === e.currentTarget && onClose()}
       // 패널 바깥(배경) 클릭 시 닫기
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
