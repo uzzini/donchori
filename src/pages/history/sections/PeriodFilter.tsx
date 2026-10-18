@@ -8,7 +8,7 @@ type PeriodFilterProps = {
   onChange: (value: Period) => void;
 };
 
-/* 기간 선택: 1·3·6개월 프리셋 / 직접 설정 */
+/* 기간 선택: 이번 달·1·3·6개월 프리셋 / 직접 설정 */
 export default function PeriodFilter({ name, value, onChange }: PeriodFilterProps) {
   // 시작일이 종료일보다 늦으면 서로 바꿈
   const onRangeChange = (from: string, to: string) =>

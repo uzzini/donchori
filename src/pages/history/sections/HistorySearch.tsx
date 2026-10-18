@@ -9,13 +9,14 @@ import CategoryFilterChips, {
 import TransactionItem from '@/features/transaction/ui/TransactionItem';
 import { groupRecent } from '@/pages/home/lib/summarize';
 import TextField from '@/shared/ui/TextField/TextField';
-import { formatPeriodShort, PERIOD_LABEL, presetPeriod, type Period } from '../lib/period';
+import { periodButtonLabel, presetPeriod, type Period } from '../lib/period';
 import { searchTransactions } from '../lib/searchTransactions';
 import PeriodSheet from './PeriodSheet';
 import styles from './HistorySearch.module.css';
 
 const PAGE_SIZE = 5;
 const DEBOUNCE_MS = 250;
+const DEFAULT_PRESET = 'month';
 
 type HistorySearchProps = {
   onSelect: (item: Transaction) => void;
@@ -25,7 +26,7 @@ type HistorySearchProps = {
 export default function HistorySearch({ onSelect }: HistorySearchProps) {
   const [q, setQ] = useState('');
   const [keyword, setKeyword] = useState('');
-  const [period, setPeriod] = useState<Period>(() => presetPeriod('1m'));
+  const [period, setPeriod] = useState<Period>(() => presetPeriod(DEFAULT_PRESET));
   const [category, setCategory] = useState<CategoryFilter>('all');
   const [periodOpen, setPeriodOpen] = useState(false);
   const titleId = useId();
@@ -70,17 +71,14 @@ export default function HistorySearch({ onSelect }: HistorySearchProps) {
     setPaging({ key: filterKey, count: visible + PAGE_SIZE });
   };
 
-  const isFiltered = q.trim() !== '' || period.preset !== '1m' || category !== 'all';
+  const isFiltered = q.trim() !== '' || period.preset !== DEFAULT_PRESET || category !== 'all';
 
   const onReset = () => {
     setQ('');
     setKeyword('');
-    setPeriod(presetPeriod('1m'));
+    setPeriod(presetPeriod(DEFAULT_PRESET));
     setCategory('all');
   };
-
-  const periodLabel =
-    period.preset === 'custom' ? formatPeriodShort(period) : `최근 ${PERIOD_LABEL[period.preset]}`;
 
   return (
     <section className={styles.search} aria-labelledby={titleId}>
@@ -122,13 +120,13 @@ export default function HistorySearch({ onSelect }: HistorySearchProps) {
           <button
             type="button"
             className={styles.period}
-            data-active={period.preset !== '1m' || undefined}
+            data-active={period.preset !== DEFAULT_PRESET || undefined}
             aria-haspopup="dialog"
             onClick={() => setPeriodOpen(true)}
           >
             <CalendarDays size={16} strokeWidth={2} aria-hidden />
             <span className="sr-only">조회 기간 </span>
-            {periodLabel}
+            {periodButtonLabel(period)}
             <ChevronDown size={16} strokeWidth={2} aria-hidden />
           </button>
         </div>
