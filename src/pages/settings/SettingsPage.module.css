@@ -1,0 +1,69 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  max-width: 560px;
+  min-height: calc(
+    100dvh - 56px - env(safe-area-inset-top) - var(--tabbar-h) - env(safe-area-inset-bottom)
+  );
+  margin-inline: auto;
+  padding: var(--space-2) calc(var(--space-5) + env(safe-area-inset-right)) var(--space-5)
+    calc(var(--space-5) + env(safe-area-inset-left));
+}
+
+.grid,
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+}
+
+.grid {
+  margin-bottom: var(--space-8);
+}
+
+/* ---------- 회원 탈퇴 ---------- */
+.withdraw {
+  display: block;
+  min-height: 44px;
+  margin: auto auto 0;
+  padding-inline: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-decoration: underline;
+  text-decoration-color: var(--border);
+  text-underline-offset: 4px;
+  border-radius: var(--radius-md);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    text-decoration-color 150ms ease;
+
+  &:hover {
+    color: var(--expense);
+    text-decoration-color: currentColor;
+    background: var(--expense-bg);
+  }
+}
+
+/* ---------- 데스크톱 ---------- */
+@media (min-width: 1024px) {
+  .page {
+    max-width: 1040px;
+    min-height: 100dvh;
+    padding: calc(var(--space-5) + env(safe-area-inset-top))
+      calc(var(--space-8) + env(safe-area-inset-right)) var(--space-6) var(--space-8);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-5);
+  }
+
+  .column {
+    gap: var(--space-5);
+  }
+}

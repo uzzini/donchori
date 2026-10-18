@@ -1,0 +1,45 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 44px;
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+
+  & dt {
+    flex-shrink: 0;
+    color: var(--text-tertiary);
+  }
+
+  & dd {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
+/* 값 자리 이동 링크 */
+.change {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  margin-inline-end: calc(var(--space-1) * -1);
+  padding-inline: var(--space-1);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+}
