@@ -1,5 +1,5 @@
+import type { UpcomingExpense } from '@/features/plan/api/useUpcomingExpenses';
 import { formatWon } from '@/shared/lib/formatAmount';
-import type { UpcomingExpense } from '../mockData';
 import styles from './UpcomingList.module.css';
 
 /* 이번 달 예정 지출 목록 */

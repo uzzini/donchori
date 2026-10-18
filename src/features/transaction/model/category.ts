@@ -10,9 +10,20 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 
-export type TransactionType = 'income' | 'expense' | 'transfer';
+export const TRANSACTION_TYPES = ['expense', 'income', 'transfer'] as const;
 
-export type ExpenseCategory = 'living' | 'food' | 'transport' | 'shopping' | 'social' | 'etc';
+export type TransactionType = (typeof TRANSACTION_TYPES)[number];
+
+export const EXPENSE_CATEGORIES = [
+  'living',
+  'food',
+  'transport',
+  'shopping',
+  'social',
+  'etc',
+] as const;
+
+export type ExpenseCategory = (typeof EXPENSE_CATEGORIES)[number];
 
 // 아이콘으로 표시할 수 있는 분류: 지출 카테고리 + 수입·이체
 export type CategoryKey = ExpenseCategory | 'income' | 'transfer';
@@ -22,15 +33,6 @@ type CategoryMeta = {
   icon: LucideIcon;
   color: string; // CSS 색상값 (토큰 변수)
 };
-
-export const EXPENSE_CATEGORIES: ExpenseCategory[] = [
-  'living',
-  'food',
-  'transport',
-  'shopping',
-  'social',
-  'etc',
-];
 
 export const CATEGORY_META: Record<CategoryKey, CategoryMeta> = {
   living: { label: '생활', icon: House, color: 'var(--cat-living)' },

@@ -1,57 +1,96 @@
 import { useId, useState } from 'react';
-import dayjs from 'dayjs';
-import { CalendarClock, ChevronRight } from 'lucide-react';
+import dayjs, { type Dayjs } from 'dayjs';
+import { CalendarClock, ChevronRight, Pencil } from 'lucide-react';
+import BudgetForm from '@/features/budget/ui/BudgetForm';
+import type { UpcomingExpense } from '@/features/plan/api/useUpcomingExpenses';
 import { formatWon } from '@/shared/lib/formatAmount';
+import { toMonthKey } from '@/shared/lib/month';
 import Modal from '@/shared/ui/Modal/Modal';
-import type { UpcomingExpense } from '../mockData';
 import UpcomingList from './UpcomingList';
 import styles from './BudgetCard.module.css';
 
 type BudgetCardProps = {
+  month: Dayjs;
+  isCurrent: boolean; // 이번 달인지, 지난 달이면 하루 사용 가능 금액·예정 지출 숨김
   budget: number | null; // null이면 예산 미설정
   spent: number;
   upcoming: UpcomingExpense[]; // 이번 달 남은 예정 지출
 };
 
-/* 월 예산: 남은 예산 + 사용률 + 하루 사용 가능 금액 + 예정 지출 목록 모달 */
-export default function BudgetCard({ budget, spent, upcoming }: BudgetCardProps) {
+/* 월 예산: 남은 예산 + 사용률 + 하루 사용 가능 금액 + 예정 지출 목록 모달 + 예산 등록·수정 */
+export default function BudgetCard({ month, isCurrent, budget, spent, upcoming }: BudgetCardProps) {
   const titleId = useId();
   const [upcomingOpen, setUpcomingOpen] = useState(false);
+  const [budgetOpen, setBudgetOpen] = useState(false);
 
+  const monthName = isCurrent ? '이번 달' : month.format('M월');
   const upcomingTotal = upcoming.reduce((sum, item) => sum + item.amount, 0);
 
   const head = (label: string) => (
     <div className={styles.head}>
-      <h2 id={titleId} className={styles.label}>
-        {label}
-      </h2>
-      <button
-        type="button"
-        className={styles.upcoming}
-        aria-haspopup="dialog"
-        onClick={() => setUpcomingOpen(true)}
-      >
-        <CalendarClock size={16} strokeWidth={2} aria-hidden />
-        예정 지출
-      </button>
+      <div className={styles.title}>
+        <h2 id={titleId} className={styles.label}>
+          {label}
+        </h2>
+        {budget !== null && (
+          <button
+            type="button"
+            className={styles.edit}
+            aria-label={`${monthName} 예산 수정`}
+            title="예산 수정"
+            aria-haspopup="dialog"
+            onClick={() => setBudgetOpen(true)}
+          >
+            <Pencil size={14} strokeWidth={2} aria-hidden />
+          </button>
+        )}
+      </div>
+      {isCurrent && (
+        <button
+          type="button"
+          className={styles.upcoming}
+          aria-haspopup="dialog"
+          onClick={() => setUpcomingOpen(true)}
+        >
+          <CalendarClock size={16} strokeWidth={2} aria-hidden />
+          예정 지출
+        </button>
+      )}
     </div>
   );
 
-  const upcomingModal = (
-    <Modal
-      open={upcomingOpen}
-      onClose={() => setUpcomingOpen(false)}
-      title="이번 달 예정 지출"
-      description={
-        upcoming.length > 0 && (
-          <span className="amount">
-            {upcoming.length}건 · 총 {formatWon(upcomingTotal)}
-          </span>
-        )
-      }
-    >
-      <UpcomingList items={upcoming} />
-    </Modal>
+  const modals = (
+    <>
+      <Modal
+        open={upcomingOpen}
+        onClose={() => setUpcomingOpen(false)}
+        title="이번 달 예정 지출"
+        description={
+          upcoming.length > 0 && (
+            <span className="amount">
+              {upcoming.length}건 · 총 {formatWon(upcomingTotal)}
+            </span>
+          )
+        }
+      >
+        <UpcomingList items={upcoming} />
+      </Modal>
+
+      <Modal
+        open={budgetOpen}
+        onClose={() => setBudgetOpen(false)}
+        title={`${month.format('YYYY년 M월')} 예산`}
+        description="한 달 동안 쓸 돈을 정해 주세요."
+      >
+        {budgetOpen && (
+          <BudgetForm
+            monthKey={toMonthKey(month)}
+            initialAmount={budget}
+            onDone={() => setBudgetOpen(false)}
+          />
+        )}
+      </Modal>
+    </>
   );
 
   const coin = (
@@ -71,11 +110,15 @@ export default function BudgetCard({ budget, spent, upcoming }: BudgetCardProps)
   if (budget === null) {
     return (
       <section className={styles.card} aria-labelledby={titleId}>
-        {head('이번 달 예산이 비어 있어요')}
+        {head(`${monthName} 예산이 비어 있어요`)}
 
-        {/* todo: 예산 등록 시트 연결 */}
         <div className={styles.headline}>
-          <button type="button" className={styles.register}>
+          <button
+            type="button"
+            className={styles.register}
+            aria-haspopup="dialog"
+            onClick={() => setBudgetOpen(true)}
+          >
             예산 등록하기
             <ChevronRight size={24} strokeWidth={2.5} aria-hidden />
           </button>
@@ -94,7 +137,7 @@ export default function BudgetCard({ budget, spent, upcoming }: BudgetCardProps)
           </div>
         </div>
 
-        {upcomingModal}
+        {modals}
       </section>
     );
   }
@@ -106,12 +149,31 @@ export default function BudgetCard({ budget, spent, upcoming }: BudgetCardProps)
   const daysLeft = today.daysInMonth() - today.date() + 1; // 오늘 포함
   const daily = Math.max(Math.floor(remaining / daysLeft), 0);
 
+  const dailyText = () => {
+    if (!isCurrent) {
+      return isOver ? (
+        <strong className="amount">{formatWon(-remaining)} 넘게 썼어요.</strong>
+      ) : (
+        <>
+          <strong className="amount">{formatWon(remaining)}</strong> 남기고 마감했어요!
+        </>
+      );
+    }
+    if (isOver) return <strong>회초리 맞기 전에 카드는 내려놔요!</strong>;
+    return (
+      <>
+        남은 {daysLeft}일 동안 하루 <strong className="amount">{formatWon(daily)}</strong>씩 쓸 수
+        있어요.
+      </>
+    );
+  };
+
   return (
     <section
       className={isOver ? `${styles.card} ${styles.over}` : styles.card}
       aria-labelledby={titleId}
     >
-      {head(isOver ? '이번 달 예산 초과' : '이번 달 남은 예산')}
+      {head(isOver ? `${monthName} 예산 초과` : `${monthName} 남은 예산`)}
 
       <p className={`amount ${styles.headline}`}>
         {isOver && '−'}
@@ -128,22 +190,13 @@ export default function BudgetCard({ budget, spent, upcoming }: BudgetCardProps)
             <p className="amount">
               {formatWon(budget)} 중 {formatWon(spent)} 썼어요.
             </p>
-            <p className={styles.daily}>
-              {isOver ? (
-                <strong>회초리 맞기 전에 카드는 내려놔요!</strong>
-              ) : (
-                <>
-                  남은 {daysLeft}일 동안 하루 <strong className="amount">{formatWon(daily)}</strong>
-                  씩 쓸 수 있어요.
-                </>
-              )}
-            </p>
+            <p className={styles.daily}>{dailyText()}</p>
           </div>
           {coin}
         </div>
       </div>
 
-      {upcomingModal}
+      {modals}
     </section>
   );
 }

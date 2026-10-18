@@ -6,6 +6,7 @@ import styles from './TopCategories.module.css';
 
 type TopCategoriesProps = {
   items: { category: ExpenseCategory; amount: number }[]; // 금액 내림차순
+  monthName: string; // '이번 달' / 'n월'
 };
 
 const RADIUS = 50;
@@ -14,7 +15,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const GAP = 2; // 조각 사이 간격
 
 /* 많이 쓴 곳: 카테고리별 지출 비율 도넛 + 목록 */
-export default function TopCategories({ items }: TopCategoriesProps) {
+export default function TopCategories({ items, monthName }: TopCategoriesProps) {
   const total = items.reduce((sum, item) => sum + item.amount, 0);
 
   let offset = 0;
@@ -34,7 +35,7 @@ export default function TopCategories({ items }: TopCategoriesProps) {
   return (
     <Section title="많이 쓴 곳">
       {total === 0 ? (
-        <p className={styles.empty}>이번 달 지출 기록이 아직 없어요.</p>
+        <p className={styles.empty}>{monthName} 지출 기록이 아직 없어요.</p>
       ) : (
         <div className={styles.body}>
           <div className={styles.chart} aria-hidden>

@@ -31,6 +31,32 @@
   color: var(--sage);
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* 예산 수정: 라벨 옆 작은 아이콘 버튼 */
+.edit {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-block: -6px;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover {
+    color: var(--text-secondary);
+    background: var(--surface);
+  }
+}
+
 .upcoming {
   display: inline-flex;
   align-items: center;

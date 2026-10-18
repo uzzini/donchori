@@ -15,8 +15,7 @@ dist-ssr
 !.env.example
 
 # Supabase local
-supabase/.branches
-supabase/.temp
+supabase/
 
 # Editor / OS
 .vscode/*

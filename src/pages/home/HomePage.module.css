@@ -71,3 +71,66 @@
     gap: var(--space-5);
   }
 }
+
+/* ---------- 불러오는 중 ---------- */
+.skeleton {
+  background: var(--surface-subtle);
+  border-radius: var(--radius-lg);
+  animation:
+    skeleton-in 200ms ease 300ms both,
+    skeleton-pulse 1.4s ease-in-out 500ms infinite;
+}
+
+@keyframes skeleton-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* 월 이동 중: 이전 달 화면을 흐리게 유지 */
+.switching {
+  opacity: 0.6;
+  transition: opacity 150ms ease 150ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: skeleton-in 0s 300ms both;
+  }
+}
+
+/* ---------- 불러오기 실패 ---------- */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-7) var(--card-padding);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-secondary);
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.retry {
+  width: auto;
+  padding-inline: var(--space-6);
+}
+
+/* 섹션 안 실패 문구 (빈 상태 문구와 같은 자리 스타일) */
+.sectionError {
+  padding-block: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+  text-align: center;
+}
