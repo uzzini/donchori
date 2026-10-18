@@ -6,7 +6,7 @@ import { transactionKeys } from './transactionKeys';
 async function fetchPeriodTransactions(from: string, to: string) {
   const { data, error } = await supabase
     .from('transactions')
-    .select('id, type, category, amount, memo, occurred_on')
+    .select('id, type, category, amount, memo, occurred_on, recurring_id')
     .gte('occurred_on', from)
     .lte('occurred_on', to)
     .order('occurred_on', { ascending: false })

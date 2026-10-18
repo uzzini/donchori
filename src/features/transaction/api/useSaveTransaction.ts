@@ -3,7 +3,7 @@ import { supabase } from '@/shared/lib/supabase';
 import type { Transaction } from '../model/transaction';
 import { transactionKeys } from './transactionKeys';
 
-type SaveTransactionParams = Omit<Transaction, 'id'> & {
+type SaveTransactionParams = Omit<Transaction, 'id' | 'recurringId'> & {
   id?: string;
 };
 

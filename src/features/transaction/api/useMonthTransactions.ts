@@ -8,7 +8,7 @@ async function fetchMonthTransactions(monthKey: string) {
   const { from, to } = monthRange(monthKey);
   const { data, error } = await supabase
     .from('transactions')
-    .select('id, type, category, amount, memo, occurred_on')
+    .select('id, type, category, amount, memo, occurred_on, recurring_id')
     .gte('occurred_on', from)
     .lt('occurred_on', to)
     .order('occurred_on', { ascending: false })

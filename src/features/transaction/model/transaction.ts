@@ -12,6 +12,7 @@ export type Transaction = {
   amount: number;
   memo: string;
   occurredOn: string;
+  recurringId: string | null; // 반복 거래로 자동 기록된 경우 원본 id
 };
 
 // transactions 테이블 행
@@ -22,6 +23,7 @@ export type TransactionRow = {
   amount: number;
   memo: string;
   occurred_on: string;
+  recurring_id: string | null;
 };
 
 export const toTransaction = (row: TransactionRow): Transaction => ({
@@ -31,6 +33,7 @@ export const toTransaction = (row: TransactionRow): Transaction => ({
   amount: row.amount,
   memo: row.memo,
   occurredOn: row.occurred_on,
+  recurringId: row.recurring_id,
 });
 
 /* 아이콘·라벨로 쓸 분류: 지출은 카테고리, 수입·이체는 유형 */

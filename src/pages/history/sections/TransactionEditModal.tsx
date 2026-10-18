@@ -15,7 +15,12 @@ type TransactionEditModalProps = {
 /* 거래 내역 수정·삭제 */
 export default function TransactionEditModal({ item, onClose }: TransactionEditModalProps) {
   return (
-    <Modal open={item !== null} onClose={onClose} title="내역 수정">
+    <Modal
+      open={item !== null}
+      onClose={onClose}
+      title="내역 수정"
+      description={item?.recurringId && '반복 거래로 자동 기록된 내역이에요.'}
+    >
       {item && <EditBody key={item.id} item={item} onClose={onClose} />}
     </Modal>
   );
