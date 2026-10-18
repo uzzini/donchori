@@ -1,0 +1,28 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  row-gap: var(--space-1);
+  justify-items: center;
+}
+
+.day {
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+
+  &[aria-checked='true'] {
+    font-weight: 700;
+    color: var(--btn-primary-text);
+    background: var(--btn-primary-bg);
+  }
+}

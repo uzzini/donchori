@@ -1,0 +1,172 @@
+.count {
+  padding: 2px 10px;
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 600;
+  color: var(--sage);
+  background: color-mix(in srgb, var(--sage) 12%, transparent);
+  border-radius: var(--radius-full);
+}
+
+/* 추가 폼 아래 구분선 */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+  padding-top: var(--space-1);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+
+  & + & {
+    border-top: 1px solid var(--border-subtle);
+  }
+}
+
+/* 줄 전체가 체크 영역 */
+.check {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: 56px;
+  cursor: pointer;
+
+  & input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.box {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: transparent;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.check:hover .box {
+  border-color: var(--sage);
+}
+
+.memo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: line-through transparent;
+  transition:
+    color 150ms ease,
+    text-decoration-color 150ms ease;
+}
+
+.amount {
+  flex-shrink: 0;
+  font-weight: 700;
+  transition: color 150ms ease;
+}
+
+/* 지출 완료 */
+.check:has(input:checked) {
+  & .box {
+    color: var(--surface);
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+
+  & .memo {
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-decoration-color: currentColor;
+  }
+
+  & .amount {
+    font-weight: 500;
+    color: var(--text-tertiary);
+  }
+}
+
+.check:has(input:focus-visible) .box {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.delete {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  margin-inline-end: calc(var(--space-2) * -1);
+  color: var(--text-tertiary);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+
+  &:hover {
+    color: var(--expense);
+    background: var(--expense-bg);
+  }
+}
+
+@media (hover: hover) {
+  .delete {
+    color: var(--border);
+  }
+
+  .item:hover .delete {
+    color: var(--text-tertiary);
+  }
+
+  .item .delete:hover {
+    color: var(--expense);
+  }
+}
+
+/* ---------- 지출 완료 묶음 ---------- */
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin-top: calc(var(--space-2) * -1);
+  padding-top: var(--gap-section);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.groupTitle {
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.empty,
+.allDone {
+  padding-block: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+  text-align: center;
+}

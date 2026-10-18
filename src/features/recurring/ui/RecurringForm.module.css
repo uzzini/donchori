@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-field);
+}
+
+/* ---------- 금액 ---------- */
+.expense {
+  --amount-color: var(--accent);
+}
+
+.income {
+  --amount-color: var(--income);
+}
+
+.transfer {
+  --amount-color: var(--text);
+}
+
+/* ---------- 반복일 · 메모 ---------- */
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-field);
+}

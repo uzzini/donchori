@@ -1,0 +1,81 @@
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 48px;
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  transition: color 150ms ease;
+
+  /* 선택 탭 밑줄 */
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    height: 2px;
+    background: var(--text);
+    border-radius: var(--radius-full);
+    scale: 0 1;
+    transition: scale 200ms cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  &[aria-selected='true'] {
+    font-weight: 700;
+    color: var(--text);
+
+    &::after {
+      scale: 1 1;
+    }
+
+    & .count {
+      color: var(--btn-primary-text);
+      background: var(--btn-primary-bg);
+    }
+  }
+
+  &:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+.count {
+  min-width: 20px;
+  padding: 1px 6px;
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 700;
+  color: var(--text-tertiary);
+  background: var(--surface-subtle);
+  border-radius: var(--radius-full);
+  transition:
+    color 150ms ease,
+    background-color 150ms ease;
+}
+
+/* 데스크톱 */
+@media (min-width: 1024px) {
+  .tabs {
+    display: flex;
+    gap: var(--space-6);
+  }
+
+  .tab {
+    padding-inline: var(--space-1);
+  }
+}

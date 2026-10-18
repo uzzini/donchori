@@ -14,6 +14,12 @@ export const TRANSACTION_TYPES = ['expense', 'income', 'transfer'] as const;
 
 export type TransactionType = (typeof TRANSACTION_TYPES)[number];
 
+export const TYPE_LABEL: Record<TransactionType, string> = {
+  expense: '지출',
+  income: '수입',
+  transfer: '이체',
+};
+
 export const EXPENSE_CATEGORIES = [
   'living',
   'food',

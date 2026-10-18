@@ -1,8 +1,7 @@
-import type { CSSProperties } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
-import { CircleAlert, PenLine } from 'lucide-react';
+import { PenLine } from 'lucide-react';
 import { parseAmount } from '@/shared/lib/formatAmount';
 import AmountInput from '@/shared/ui/AmountInput/AmountInput';
 import Button from '@/shared/ui/Button/Button';
@@ -10,15 +9,11 @@ import DatePicker from '@/shared/ui/DatePicker/DatePicker';
 import TextField from '@/shared/ui/TextField/TextField';
 import { useToastStore } from '@/stores/useToastStore';
 import { useCreateTransaction } from '../api/useCreateTransaction';
-import { CATEGORY_META, EXPENSE_CATEGORIES, type TransactionType } from '../model/category';
+import { TYPE_LABEL, type TransactionType } from '../model/category';
 import { recordSchema, type RecordFormValues } from '../model/recordSchema';
+import CategoryChips from './CategoryChips';
+import TypeTabs from './TypeTabs';
 import styles from './RecordForm.module.css';
-
-const TYPES: { value: TransactionType; label: string }[] = [
-  { value: 'expense', label: '지출' },
-  { value: 'income', label: '수입' },
-  { value: 'transfer', label: '이체' },
-];
 
 const MEMO_PLACEHOLDER: Record<TransactionType, string> = {
   expense: '어디에 썼나요?',
@@ -50,7 +45,7 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
   });
 
   const [type, amount, category] = useWatch({ control, name: ['type', 'amount', 'category'] });
-  const typeLabel = TYPES.find((t) => t.value === type)!.label;
+  const typeLabel = TYPE_LABEL[type];
   const isFilled = amount !== '' && (type !== 'expense' || category !== null);
 
   const onSubmit = handleSubmit((values) => {
@@ -78,23 +73,14 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
         control={control}
         name="type"
         render={({ field }) => (
-          <div className={styles.tabs} role="radiogroup" aria-label="기록 유형">
-            {TYPES.map((t) => (
-              <label key={t.value} className={styles.tab}>
-                <input
-                  type="radio"
-                  name={`${idPrefix}-type`}
-                  value={t.value}
-                  checked={field.value === t.value}
-                  onChange={() => {
-                    field.onChange(t.value);
-                    setValue('category', null);
-                  }}
-                />
-                {t.label}
-              </label>
-            ))}
-          </div>
+          <TypeTabs
+            name={`${idPrefix}-type`}
+            value={field.value}
+            onChange={(next) => {
+              field.onChange(next);
+              setValue('category', null);
+            }}
+          />
         )}
       />
 
@@ -117,43 +103,18 @@ export default function RecordForm({ idPrefix }: RecordFormProps) {
 
       {/* 카테고리는 지출만 (수입·이체는 금액·날짜·메모만) */}
       {type === 'expense' && (
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.label}>카테고리</legend>
-          <Controller
-            control={control}
-            name="category"
-            render={({ field }) => (
-              <div className={styles.chips}>
-                {EXPENSE_CATEGORIES.map((key) => {
-                  const { label, icon: Icon, color } = CATEGORY_META[key];
-                  return (
-                    <label
-                      key={key}
-                      className={styles.chip}
-                      style={{ '--cat-color': color } as CSSProperties}
-                    >
-                      <input
-                        type="radio"
-                        name={`${idPrefix}-category`}
-                        value={key}
-                        checked={field.value === key}
-                        onChange={() => field.onChange(key)}
-                      />
-                      <Icon size={16} strokeWidth={2} aria-hidden />
-                      {label}
-                    </label>
-                  );
-                })}
-              </div>
-            )}
-          />
-          {errors.category && (
-            <p className={styles.error}>
-              <CircleAlert size={14} strokeWidth={2} aria-hidden />
-              {errors.category.message}
-            </p>
+        <Controller
+          control={control}
+          name="category"
+          render={({ field }) => (
+            <CategoryChips
+              name={`${idPrefix}-category`}
+              value={field.value}
+              onChange={field.onChange}
+              error={errors.category?.message}
+            />
           )}
-        </fieldset>
+        />
       )}
 
       <div className={styles.row}>

@@ -1,0 +1,45 @@
+/* 카테고리 비율 막대 */
+.bar {
+  display: flex;
+  gap: 2px;
+  height: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  border-radius: var(--radius-full);
+
+  & span {
+    flex-basis: 0;
+    min-width: 4px;
+  }
+}
+
+.empty {
+  background: transparent;
+  border: 1.5px dashed var(--border);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 500;
+  color: var(--text-secondary);
+
+  & li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  & .amount {
+    color: var(--text-tertiary);
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+}
