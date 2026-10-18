@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Check, CircleMinus } from 'lucide-react';
+import { useDeleteAccount } from '@/features/account/api/useDeleteAccount';
 import Modal from '@/shared/ui/Modal/Modal';
+import { useToastStore } from '@/stores/useToastStore';
 import styles from './SettingsModal.module.css';
 
 type WithdrawModalProps = {
@@ -21,10 +23,16 @@ export default function WithdrawModal({ open, nickname, onClose }: WithdrawModal
 }
 
 function WithdrawBody({ nickname, onClose }: { nickname: string; onClose: () => void }) {
+  const showToast = useToastStore((s) => s.show);
+  const deleteAccount = useDeleteAccount();
   const [agreed, setAgreed] = useState(false);
 
-  // todo: 회원 탈퇴 연동
-  const onWithdraw = () => onClose();
+  // 성공하면 세션이 사라져 ProtectedRoute가 로그인 화면으로 보냄
+  const onWithdraw = () =>
+    deleteAccount.mutate(undefined, {
+      onSuccess: () => showToast('탈퇴가 완료됐어요.'),
+      onError: () => showToast('탈퇴하지 못했어요. 잠시 후 다시 시도해 주세요.', 'error'),
+    });
 
   return (
     <div className={styles.form}>
@@ -54,7 +62,12 @@ function WithdrawBody({ nickname, onClose }: { nickname: string; onClose: () => 
         <button type="button" className={styles.cancel} autoFocus onClick={onClose}>
           취소
         </button>
-        <button type="button" className={styles.danger} disabled={!agreed} onClick={onWithdraw}>
+        <button
+          type="button"
+          className={styles.danger}
+          disabled={!agreed || deleteAccount.isPending}
+          onClick={onWithdraw}
+        >
           탈퇴하기
         </button>
       </div>
