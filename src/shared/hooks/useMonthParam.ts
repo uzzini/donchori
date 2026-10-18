@@ -2,7 +2,7 @@ import { useSearchParams } from 'react-router';
 import dayjs from 'dayjs';
 import { parseMonthKey, toMonthKey } from '@/shared/lib/month';
 
-/* 홈에서 보고 있는 달 */
+/* 보고 있는 달 (?month=YYYY-MM, 홈·내역 공용) */
 export function useMonthParam() {
   const [searchParams, setSearchParams] = useSearchParams();
   const thisMonth = dayjs().startOf('month');

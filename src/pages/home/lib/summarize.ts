@@ -28,7 +28,8 @@ export function sumByCategory(transactions: Transaction[]) {
     .sort((a, b) => b.amount - a.amount);
 }
 
-const dayLabel = (date: dayjs.Dayjs) => {
+/* 날짜 → '오늘' / '어제' / 'M월 D일 ( )' */
+export const dayLabel = (date: dayjs.Dayjs) => {
   const today = dayjs();
   if (date.isSame(today, 'day')) return '오늘';
   if (date.isSame(today.subtract(1, 'day'), 'day')) return '어제';

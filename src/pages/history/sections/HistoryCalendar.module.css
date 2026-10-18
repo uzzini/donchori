@@ -1,0 +1,165 @@
+.card {
+  padding: var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.weekdays,
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.weekday {
+  padding-block: var(--space-1);
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-align: center;
+
+  &:first-child {
+    color: var(--expense);
+  }
+
+  &:nth-child(7) {
+    color: var(--income);
+  }
+}
+
+.row {
+  display: contents;
+}
+
+.slot {
+  display: flex;
+  min-width: 0;
+}
+
+/* ---------- 날짜 칸 ---------- */
+.cell {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  min-height: 60px;
+  padding: var(--space-1);
+  text-align: start;
+  /* 히트맵: 그 달 하루 최대 지출 대비 0~4단계 */
+  background: color-mix(in srgb, var(--expense) calc(var(--level, 0) * 5%), transparent);
+  border-radius: var(--radius-sm);
+  transition:
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+
+  &:hover:not(:disabled) {
+    box-shadow: inset 0 0 0 1px var(--border);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.date {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+
+  &[data-weekday='0'] {
+    color: var(--expense);
+  }
+
+  &[data-weekday='6'] {
+    color: var(--income);
+  }
+
+  .cell[aria-current='date'] & {
+    font-weight: 700;
+    color: var(--btn-primary-text);
+    background: var(--btn-primary-bg);
+  }
+
+  .cell:disabled & {
+    color: var(--border);
+  }
+}
+
+.inc,
+.exp {
+  overflow: hidden;
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  font-weight: 600;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.inc {
+  color: var(--income);
+}
+
+.exp {
+  color: var(--text);
+}
+
+/* 이체만 있는 날 */
+.dot {
+  width: 4px;
+  height: 4px;
+  margin-inline-start: 10px;
+  background: var(--sage);
+  border-radius: var(--radius-full);
+}
+
+/* ---------- 범례 ---------- */
+.legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  color: var(--text-tertiary);
+}
+
+.swatches {
+  display: flex;
+  gap: 2px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  background: color-mix(in srgb, var(--expense) calc(var(--level) * 5%), transparent);
+  border-radius: 4px;
+}
+
+@media (max-width: 389px) {
+  .inc,
+  .exp {
+    font-size: 11px;
+    letter-spacing: -0.02em;
+  }
+}
+
+@media (min-width: 600px) {
+  .card {
+    padding: var(--card-padding);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cell {
+    min-height: 76px;
+  }
+}

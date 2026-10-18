@@ -1,0 +1,234 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.title {
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  font-weight: 700;
+}
+
+/* ---------- 검색 조건 ---------- */
+.filters {
+  --chips-bleed: 0px;
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+
+  & fieldset label:has(input:focus-visible) {
+    outline-offset: -2px;
+  }
+
+  & input::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.row {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.searchField {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 검색창 */
+.searchField > div {
+  background: var(--surface);
+  border-color: var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-card);
+}
+
+/* 기간 버튼 */
+.period {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  padding-inline: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-card);
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease;
+
+  & svg {
+    color: var(--text-tertiary);
+  }
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+
+  &[data-active] {
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    border-color: var(--accent);
+
+    & svg {
+      color: var(--accent);
+    }
+  }
+}
+
+/* 검색어 지우기 */
+.clear {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-inline-end: -13px;
+  color: var(--text-tertiary);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline-offset: -2px;
+  }
+}
+
+/* ---------- 결과 카드 ---------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+  padding: var(--card-padding);
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.resultHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 28px;
+}
+
+.count {
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-secondary);
+
+  & strong {
+    font-weight: 700;
+    color: var(--text);
+  }
+}
+
+.reset {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-block: -8px;
+  padding-inline: var(--space-1);
+  margin-inline-end: calc(var(--space-1) * -1);
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-tertiary);
+  transition: color 150ms ease;
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+}
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-section);
+  animation: panel-in 200ms ease both;
+
+  & li {
+    border-radius: var(--radius-sm);
+  }
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+
+  & + & {
+    margin-top: calc(var(--space-2) * -1);
+    padding-top: var(--gap-section);
+    border-top: 1px solid var(--border-subtle);
+  }
+}
+
+.day {
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  font-weight: 600;
+  color: var(--text-tertiary);
+}
+
+.more {
+  width: 100%;
+  height: 44px;
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  transition: background-color 150ms ease;
+
+  &:hover {
+    background: var(--surface-subtle);
+  }
+}
+
+/* ---------- 결과 없음 ---------- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding-block: var(--space-7);
+  text-align: center;
+
+  & svg {
+    margin-bottom: var(--space-2);
+    color: var(--text-tertiary);
+  }
+}
+
+.emptyTitle {
+  font-size: var(--text-sm);
+  line-height: var(--lh-sm);
+  color: var(--text-secondary);
+}
+
+.emptyHint {
+  font-size: var(--text-xs);
+  line-height: var(--lh-xs);
+  color: var(--text-tertiary);
+}
+
+.more.emptyReset {
+  width: auto;
+  margin-top: var(--space-3);
+  padding-inline: var(--space-6);
+}
